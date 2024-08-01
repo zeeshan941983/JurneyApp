@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
+import 'package:ibiza/core/models/most_popular_post.dart';
+import 'package:ibiza/core/routes/app_router.dart';
 import 'package:ibiza/core/widgets/app_button.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
-import 'package:ibiza/screens/04_home_screen/models/card_model.dart';
+
 import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +22,8 @@ showActivityDialouge(BuildContext context) {
           height: MediaQuery.sizeOf(context).height * 0.7,
           width: MediaQuery.sizeOf(context).width * 0.7,
           margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 150.h),
-          padding: EdgeInsets.only(left: 10.w, top: 20.h, right: 10.w, bottom: 5.h),
+          padding:
+              EdgeInsets.only(left: 10.w, top: 20.h, right: 10.w, bottom: 5.h),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16.r),
@@ -31,7 +34,7 @@ showActivityDialouge(BuildContext context) {
               TextField(
                 controller: controller,
                 onChanged: (value) {
-                  provider.filterCards(value);
+                  provider.filterDocuments(value);
                 },
                 decoration: InputDecoration(
                   hintText: 'Search Activity',
@@ -40,7 +43,8 @@ showActivityDialouge(BuildContext context) {
                     size: 25.sp,
                   ),
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(width: 1.w, color: AppColors.col7A7A7A),
+                    borderSide:
+                        BorderSide(width: 1.w, color: AppColors.col7A7A7A),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                 ),
@@ -66,24 +70,40 @@ showActivityDialouge(BuildContext context) {
                       ),
                     )
                   : Expanded(
-                      child: Scrollbar(
-                        radius: const Radius.elliptical(5, 5),
-                        thumbVisibility: true,
-                        trackVisibility: true,
-                        interactive: true,
-                        controller: scrollController,
-                        child: ListView.separated(
-                          separatorBuilder: (context, index) => 5.h.ph,
-                          controller: scrollController,
-                          itemCount: provider.filteredCards.length,
-                          itemBuilder: (context, index) => ActivityContainer(
-                            data: provider.filteredCards[index],
-                            onTap: () {
-                              provider.addActivity(provider.filteredCards[index]);
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
+                      child: SizedBox(
+                        height: 307.h,
+                        child: ListView.builder(
+                            itemCount: provider.filteredDocuments.length,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, index) {
+                              final popularSerivce =
+                                  provider.popularServiceModel.documents[index];
+
+                              return ActivityContainer(
+                                data: popularSerivce,
+                                image: popularSerivce.images.first,
+                                place: popularSerivce.title,
+                                price: popularSerivce.price.toDouble(),
+                                distance: provider.distanceBetween[index],
+                                date: DateTime.now(),
+                                onTap: () {
+                                  context.pushName(AppRoutes.detailsScreen);
+                                },
+                              );
+                              // return InkWell(
+                              //   onTap: () =>
+                              //       context.pushName(AppRoutes.detailsScreen),
+                              //   child: ListCard(
+                              //     image: popularSerivce.images.first,
+                              //     place: popularSerivce.title,
+                              //     price: popularSerivce.price.toDouble(),
+                              //     distance: provider.distanceBetween[index],
+                              //     date: DateTime.now(),
+                              //     isDarkBG: true,
+                              //   ).withPadding(),
+                              // );
+                            }),
                       ),
                     ),
             ],
@@ -99,9 +119,20 @@ class ActivityContainer extends StatelessWidget {
     super.key,
     required this.data,
     required this.onTap,
+    required this.image,
+    required this.place,
+    required this.price,
+    required this.distance,
+    required this.date,
   });
 
-  final ActivityModel data;
+  final DocumentModel data;
+  final String image;
+  final String place;
+  final double price;
+  final double distance;
+  final DateTime date;
+
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
@@ -120,8 +151,8 @@ class ActivityContainer extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(15.42.r),
-            child: Image.asset(
-              data.image,
+            child: Image.network(
+              data.images.first,
               height: 80.h,
               width: 85.w,
               fit: BoxFit.cover,
@@ -135,25 +166,25 @@ class ActivityContainer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 AppText(
-                  text: data.place.split('').take(54).join(),
+                  text: place.split('').take(54).join(),
                   color: AppColors.col1D1D1D,
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w600,
                 ),
                 AppText(
-                  text: '${data.distance} Kilometer away',
+                  text: '${distance.toString()} Kilometer away',
                   color: AppColors.col7A7A7A,
                   fontSize: 12.sp,
                   overflow: TextOverflow.ellipsis,
                   fontWeight: FontWeight.w400,
                 ),
-                AppText(
-                  text: 'Hosted by ${data.hostedBy}',
-                  color: AppColors.col7A7A7A,
-                  fontSize: 12.sp,
-                  overflow: TextOverflow.ellipsis,
-                  fontWeight: FontWeight.w400,
-                ),
+                // AppText(
+                //   text: 'Hosted by ${data.hostedBy}',
+                //   color: AppColors.col7A7A7A,
+                //   fontSize: 12.sp,
+                //   overflow: TextOverflow.ellipsis,
+                //   fontWeight: FontWeight.w400,
+                // ),
                 RichText(
                   text: TextSpan(
                     text: 'Rating ',
@@ -164,15 +195,15 @@ class ActivityContainer extends StatelessWidget {
                       fontFamily: outfit,
                     ),
                     children: [
-                      TextSpan(
-                        text: '${data.review}',
-                        style: TextStyle(
-                          color: AppColors.colDB8332,
-                          fontSize: 10.sp,
-                          fontFamily: outfit,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
+                      // TextSpan(
+                      //   text: '${}',
+                      //   style: TextStyle(
+                      //     color: AppColors.colDB8332,
+                      //     fontSize: 10.sp,
+                      //     fontFamily: outfit,
+                      //     fontWeight: FontWeight.w400,
+                      //   ),
+                      // ),
                     ],
                   ),
                 )

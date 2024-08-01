@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 class BorderButton extends StatelessWidget {
-   const BorderButton({
+  const BorderButton({
     super.key,
     required this.imageIcon,
     required this.text,

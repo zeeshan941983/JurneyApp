@@ -27,6 +27,33 @@ class HomeProvider extends BaseViewModel {
     getPopularService();
   }
   List<Categories> _categories = [];
+  List<DocumentModel> _allDocuments = [];
+  List<DocumentModel> get alldocument => _allDocuments;
+
+  // Filtered list of documents
+  List<DocumentModel> _filteredDocuments = [];
+
+  // Getter for filtered documents
+  List<DocumentModel> get filteredDocuments => _filteredDocuments;
+
+  // // Method to set all documents (initial data load)
+  // void setAllDocuments() {
+  //   _allDocuments = documents;
+  //   _filteredDocuments = documents;
+  //   notifyListeners();
+  // }
+
+  void filterDocuments(String query) {
+    if (query.isEmpty) {
+      _filteredDocuments = popularServiceModel.documents;
+    } else {
+      _filteredDocuments = popularServiceModel.documents.where((document) {
+        return document.title.toLowerCase().contains(query.toLowerCase());
+      }).toList();
+    }
+    notifyListeners();
+  }
+
   List<Categories> get categories => _categories;
   set categories(List<Categories> cat) {
     _categories = cat;
@@ -230,7 +257,8 @@ class HomeProvider extends BaseViewModel {
       double lng = double.parse(addressMap['lng'].toString());
       lngList.add(lng);
       latList.add(lat);
-      final distance = Geolocator.distanceBetween(33.98052, 71.54901, latList[i], lngList[i]);
+      final distance = Geolocator.distanceBetween(
+          33.98052, 71.54901, latList[i], lngList[i]);
       double lastvalue = distance / 1000;
       _distanceBetween.add(double.parse(lastvalue.toStringAsFixed(2)));
       print('Distance to point $i: ${distance / 1000} km');

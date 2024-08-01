@@ -55,11 +55,10 @@ class Section3 extends StatelessWidget {
                   homeProvider.showDate();
                 },
               ),
-
-               IconButton(icon: Icon(Icons.restart_alt,size: 20.sp), onPressed: (){                  
-                                     
-                    },).withPadding(padding: EdgeInsets.only(right: 10.sp)) 
-            
+              IconButton(
+                icon: Icon(Icons.restart_alt, size: 20.sp),
+                onPressed: () {},
+              ).withPadding(padding: EdgeInsets.only(right: 10.sp))
             ],
           ).withPadding(),
           10.ph,
