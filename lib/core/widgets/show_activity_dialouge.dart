@@ -10,12 +10,18 @@ import 'package:provider/provider.dart';
 
 showActivityDialouge(BuildContext context) {
   final controller = TextEditingController();
-  final ScrollController scrollController = ScrollController();
+  // final ScrollController scrollController = ScrollController();
 
   showDialog(
     context: context,
-    builder: (context) => Consumer<HomeProvider>(
-      builder: (context, provider, child) => Material(
+    builder: (context) =>
+        Consumer<HomeProvider>(builder: (context, provider, child) {
+      // List<DocumentModel> filteredDocuments = provider
+      //     .popularServiceModel.documents
+      //     .where((doc) =>
+      //         doc.title.toLowerCase().contains(controller.text.toLowerCase()))
+      //     .toList();
+      return Material(
         type: MaterialType.card,
         color: Colors.transparent,
         child: Container(
@@ -78,7 +84,7 @@ showActivityDialouge(BuildContext context) {
                             scrollDirection: Axis.vertical,
                             itemBuilder: (context, index) {
                               final popularSerivce =
-                                  provider.popularServiceModel.documents[index];
+                                  provider.filteredDocuments[index];
 
                               return ActivityContainer(
                                 data: popularSerivce,
@@ -109,11 +115,12 @@ showActivityDialouge(BuildContext context) {
             ],
           ),
         ),
-      ),
-    ),
+      );
+    }),
   );
 }
 
+// provider.filterDocuments(value);
 class ActivityContainer extends StatelessWidget {
   const ActivityContainer({
     super.key,

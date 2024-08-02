@@ -1,13 +1,10 @@
-
-import 'dart:developer' as log;
-
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/constants/enums.dart';
 import 'package:ibiza/core/routes/app_router.dart';
 import 'package:ibiza/core/widgets/app_button.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
-import 'package:ibiza/core/widgets/app_text_field.dart';
+
 import 'package:ibiza/core/widgets/custom_loader.dart';
 import 'package:ibiza/core/widgets/list_card.dart';
 import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
@@ -110,7 +107,6 @@ class _Section1State extends State<Section1> with TickerProviderStateMixin {
                   //     color: AppColors.colFFFFFF,
                   //   ),
                   // ),
-               
                 ],
               ).withPadding(padding: EdgeInsets.symmetric(horizontal: 8.w)),
               24.h.ph,
@@ -224,8 +220,8 @@ class _Section1State extends State<Section1> with TickerProviderStateMixin {
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      final popularSerivce = provider.popularServiceModel.documents[index];
-                
+                      final popularSerivce =
+                          provider.popularServiceModel.documents[index];
 
                       return InkWell(
                         onTap: () => context.pushName(AppRoutes.detailsScreen),

@@ -27,29 +27,18 @@ class HomeProvider extends BaseViewModel {
     getPopularService();
   }
   List<Categories> _categories = [];
-  List<DocumentModel> _allDocuments = [];
-  List<DocumentModel> get alldocument => _allDocuments;
 
-  // Filtered list of documents
   List<DocumentModel> _filteredDocuments = [];
 
-  // Getter for filtered documents
   List<DocumentModel> get filteredDocuments => _filteredDocuments;
-
-  // // Method to set all documents (initial data load)
-  // void setAllDocuments() {
-  //   _allDocuments = documents;
-  //   _filteredDocuments = documents;
-  //   notifyListeners();
-  // }
-
+//filteredDocuments popular services
   void filterDocuments(String query) {
     if (query.isEmpty) {
-      _filteredDocuments = popularServiceModel.documents;
+      _filteredDocuments = popularServiceModel.documents.toList();
     } else {
-      _filteredDocuments = popularServiceModel.documents.where((document) {
-        return document.title.toLowerCase().contains(query.toLowerCase());
-      }).toList();
+      _filteredDocuments = popularServiceModel.documents
+          .where((doc) => doc.title.toLowerCase().contains(query.toLowerCase()))
+          .toList();
     }
     notifyListeners();
   }
