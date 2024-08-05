@@ -32,13 +32,15 @@ void showAddAppointmentDialog(
                 size: 24.sp,
               ),
               AppText(
-                text: DateFormat('EEEE, MMMM dd,  \n hh:mm a').format(selectedDate),
+                text: DateFormat('EEEE, MMMM dd,  \n hh:mm a')
+                    .format(selectedDate),
                 color: AppColors.col7A7A7A,
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
               ),
               AppText(
-                text: DateFormat('\n hh:mm a').format(selectedDate.add(provider.duration)),
+                text: DateFormat('\n hh:mm a')
+                    .format(selectedDate.add(provider.duration)),
                 color: AppColors.col7A7A7A,
                 fontSize: 14.sp,
                 overflow: TextOverflow.ellipsis,
@@ -63,17 +65,22 @@ void showAddAppointmentDialog(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        AppText(
-                          text: provider.activityData?.place ?? '',
-                          color: AppColors.col7A7A7A,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
+                        Expanded(
+                          child: AppText(
+                            text: provider.populardata?.title ?? '',
+                            color: AppColors.col7A7A7A,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
+                        10.w.ph,
                         AppText(
-                          text: '\$${provider.activityData?.price ?? 0}/hour',
+                          text: '\$${provider.populardata?.price ?? 0}/hour',
                           color: AppColors.col7A7A7A,
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
+                          overflow: TextOverflow.ellipsis,
                         )
                       ],
                     ),
@@ -112,7 +119,9 @@ void showAddAppointmentDialog(
                             builder: (context, index) {
                               final hours = index ~/ 2;
                               final minutes = (index % 2) * 30;
-                              final displayText = minutes == 0 ? '$hours h' : '$hours : ${minutes ~/ 30 * 30} h';
+                              final displayText = minutes == 0
+                                  ? '$hours h'
+                                  : '$hours : ${minutes ~/ 30 * 30} h';
                               return InkWell(
                                 onTap: () {
                                   // provider.setDuration(Duration(minutes: index * 30));
@@ -125,7 +134,8 @@ void showAddAppointmentDialog(
                                 ),
                               );
                             },
-                            childCount: 24 * 2, // 24 hours, half-hour increments
+                            childCount:
+                                24 * 2, // 24 hours, half-hour increments
                           ),
                         ),
                       )
@@ -154,7 +164,7 @@ void showAddAppointmentDialog(
               text: 'Save',
               onTap: () {
                 if (formKey.currentState!.validate()) {
-                  String? subject = provider.activityData?.place;
+                  String? subject = provider.populardata?.title;
                   if (subject != "") {
                     final Appointment newAppointment = Appointment(
                       subject: subject!,
@@ -164,10 +174,13 @@ void showAddAppointmentDialog(
                       ),
                       color: getRandomColorWithOpacity(0.6),
                     );
-                    Provider.of<HomeProvider>(context, listen: false).setAppointment(newAppointment);
+                    Provider.of<HomeProvider>(context, listen: false)
+                        .setAppointment(newAppointment);
+
                     Navigator.of(context).pop();
                   }
                 }
+                provider.clearPopularData();
               },
             )
           ],

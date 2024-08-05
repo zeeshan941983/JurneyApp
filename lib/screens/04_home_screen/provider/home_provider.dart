@@ -26,9 +26,10 @@ class HomeProvider extends BaseViewModel {
     getCalenders();
     getPopularService();
   }
+  final TextEditingController searchController = TextEditingController();
   List<Categories> _categories = [];
 
-  List<DocumentModel> _filteredDocuments = [];
+  late List<DocumentModel> _filteredDocuments = popularServiceModel.documents;
 
   List<DocumentModel> get filteredDocuments => _filteredDocuments;
 //filteredDocuments popular services
@@ -40,6 +41,13 @@ class HomeProvider extends BaseViewModel {
           .where((doc) => doc.title.toLowerCase().contains(query.toLowerCase()))
           .toList();
     }
+    notifyListeners();
+  }
+
+  clearcontroller() {
+    searchController.clear();
+    searchController.text = '';
+    filterDocuments('');
     notifyListeners();
   }
 
@@ -199,6 +207,21 @@ class HomeProvider extends BaseViewModel {
     notifyListeners();
   }
 
+/////========add popular activity=======
+  DocumentModel? _popularModel;
+  DocumentModel? get populardata => _popularModel;
+  addpopular(DocumentModel popular) {
+    _popularModel = popular;
+    notifyListeners();
+  }
+
+  clearPopularData() {
+    _popularModel = null;
+
+    notifyListeners();
+  }
+
+  ///
   changeState({Function? fun}) {
     fun;
     notifyListeners;

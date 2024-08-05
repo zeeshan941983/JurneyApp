@@ -47,7 +47,9 @@ class DetailsSection5 extends StatelessWidget {
                             child: Container(
                               height: 4.h,
                               decoration: BoxDecoration(
-                                color: index == 4 ? AppColors.col222222 : AppColors.colDDDDDD,
+                                color: index == 4
+                                    ? AppColors.col222222
+                                    : AppColors.colDDDDDD,
                                 borderRadius: BorderRadius.circular(2.r),
                               ),
                             ),
@@ -113,7 +115,8 @@ class DetailsSection5 extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               radius: 46.r,
-                              backgroundImage: const AssetImage(AppImages.homeBg),
+                              backgroundImage:
+                                  const AssetImage(AppImages.homeBg),
                             ),
                             Align(
                               alignment: Alignment.bottomRight,
@@ -147,7 +150,8 @@ class DetailsSection5 extends StatelessWidget {
                     children: [
                       HostTexts(text1: '53', text2: 'Reviews'),
                       HostTexts(text1: '4.5', text2: 'Rating'),
-                      HostTexts(text1: '9', text2: 'Years hosting'),
+                      Expanded(
+                          child: HostTexts(text1: '9', text2: 'Years hosting')),
                     ],
                   ),
                 ],
@@ -172,7 +176,8 @@ class DetailsSection5 extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
           AppText(
-            text: 'Superhosts are experienced, highly rated hosts who are committed to providing great stays for guests.',
+            text:
+                'Superhosts are experienced, highly rated hosts who are committed to providing great stays for guests.',
             fontSize: 16.sp,
             color: AppColors.col222222,
             fontWeight: FontWeight.w400,
@@ -224,7 +229,8 @@ class DetailsSection5 extends StatelessWidget {
           ),
           15.h.ph,
           AppText(
-            text: 'I was born in this region and am still living in Ortahisar. l live in a local cave house and my job is small…',
+            text:
+                'I was born in this region and am still living in Ortahisar. l live in a local cave house and my job is small…',
             fontSize: 16.sp,
             color: AppColors.col222222,
             fontWeight: FontWeight.w400,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/models/most_popular_post.dart';
-import 'package:ibiza/core/routes/app_router.dart';
+
 import 'package:ibiza/core/widgets/app_button.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
 
@@ -9,18 +9,10 @@ import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
 import 'package:provider/provider.dart';
 
 showActivityDialouge(BuildContext context) {
-  final controller = TextEditingController();
-  // final ScrollController scrollController = ScrollController();
-
   showDialog(
     context: context,
     builder: (context) =>
         Consumer<HomeProvider>(builder: (context, provider, child) {
-      // List<DocumentModel> filteredDocuments = provider
-      //     .popularServiceModel.documents
-      //     .where((doc) =>
-      //         doc.title.toLowerCase().contains(controller.text.toLowerCase()))
-      //     .toList();
       return Material(
         type: MaterialType.card,
         color: Colors.transparent,
@@ -38,7 +30,7 @@ showActivityDialouge(BuildContext context) {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                controller: controller,
+                controller: provider.searchController,
                 onChanged: (value) {
                   provider.filterDocuments(value);
                 },
@@ -94,21 +86,11 @@ showActivityDialouge(BuildContext context) {
                                 distance: provider.distanceBetween[index],
                                 date: DateTime.now(),
                                 onTap: () {
-                                  context.pushName(AppRoutes.detailsScreen);
+                                  provider.addpopular(popularSerivce);
+                                  Navigator.pop(context);
+                                  provider.clearcontroller();
                                 },
                               );
-                              // return InkWell(
-                              //   onTap: () =>
-                              //       context.pushName(AppRoutes.detailsScreen),
-                              //   child: ListCard(
-                              //     image: popularSerivce.images.first,
-                              //     place: popularSerivce.title,
-                              //     price: popularSerivce.price.toDouble(),
-                              //     distance: provider.distanceBetween[index],
-                              //     date: DateTime.now(),
-                              //     isDarkBG: true,
-                              //   ).withPadding(),
-                              // );
                             }),
                       ),
                     ),
