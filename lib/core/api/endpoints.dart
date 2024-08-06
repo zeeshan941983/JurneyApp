@@ -5,7 +5,7 @@ class Endpoints {
   static const String popularService = "$url/services/popular";
   static const String subcategories = "$categories/SubCategories";
   static String catSubCtegories(v) => "$categories/$v/sub-categories";
-
+  static const String addActivityToCallender = "$url/calender";
   //Registeration
   static const String register = "$user/register";
   static const String login = "$user/login";

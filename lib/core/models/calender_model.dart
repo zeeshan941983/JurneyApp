@@ -60,7 +60,8 @@ class Day {
 
   factory Day.fromJson(Map<String, dynamic> json) {
     var list = json['timeSlots'] as List;
-    List<TimeSlot> timeSlotsList = list.map((i) => TimeSlot.fromJson(i)).toList();
+    List<TimeSlot> timeSlotsList =
+        list.map((i) => TimeSlot.fromJson(i)).toList();
 
     return Day(
       date: json['date'],

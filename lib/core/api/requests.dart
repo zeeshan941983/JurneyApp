@@ -4,19 +4,19 @@ import 'package:http/http.dart' as http;
 import 'package:ibiza/core/api/response_model.dart';
 
 class APIRequests {
+  static bool isdynamic = false;
   static Future<ResponseModel> makePostRequest(
     String url,
     Map<String, String> headers,
-    Map<String, String> body, {
+    Map<String, dynamic> body, {
     int? expectedStatus = 200,
   }) async {
     try {
       var request = http.Request('POST', Uri.parse(url));
-      request.bodyFields = body;
       request.headers.addAll(headers);
+      request.body = json.encode(body);
 
       http.StreamedResponse response = await request.send();
-
       String responseBody = await response.stream.bytesToString();
       log(response.statusCode.toString());
       log(responseBody);

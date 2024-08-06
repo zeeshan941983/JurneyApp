@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
+import 'package:ibiza/core/models/add_activity_model.dart';
 import 'package:ibiza/core/widgets/app_button.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
 import 'package:ibiza/core/widgets/show_activity_dialouge.dart';
@@ -14,7 +15,8 @@ void showAddAppointmentDialog(
   BuildContext context,
 ) {
   final focus = FocusNode();
-
+  DateFormat formatter = DateFormat('yyyy-mm-dd');
+  DateFormat sDateFormate = DateFormat('hh:mm');
   focus.requestFocus();
   // Duration duration = const Duration(hours: 1);
   final formKey = GlobalKey<FormState>();
@@ -163,6 +165,10 @@ void showAddAppointmentDialog(
               fontWeight: FontWeight.w500,
               text: 'Save',
               onTap: () {
+                String formattedDate = formatter.format(provider.date);
+
+                String formatedStartTime = sDateFormate.format(selectedDate);
+                print(formatedStartTime);
                 if (formKey.currentState!.validate()) {
                   String? subject = provider.populardata?.title;
                   if (subject != "") {
@@ -174,6 +180,20 @@ void showAddAppointmentDialog(
                       ),
                       color: getRandomColorWithOpacity(0.6),
                     );
+                    WeekActivity weekActivity = WeekActivity(
+                        week: "2024-08-06",
+                        slot: Slot(
+                            date: formattedDate,
+                            dayOfWeek: "Friday",
+                            timeSlots: [
+                              TimeSlotAddActivity(
+                                  start: formatedStartTime,
+                                  end: DateFormat('hh:mm').format(
+                                      selectedDate.add(provider.duration)),
+                                  activity: "66a0ceea9e093522a6fb3776",
+                                  availExtraService: true)
+                            ]));
+                    provider.getActivityToCalendar(weekActivity);
                     Provider.of<HomeProvider>(context, listen: false)
                         .setAppointment(newAppointment);
 

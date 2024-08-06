@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/enums.dart';
 import 'package:ibiza/core/constants/constants.dart';
+
 import 'package:ibiza/core/widgets/app_text.dart';
 import 'package:ibiza/core/widgets/custom_loader.dart';
 import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';

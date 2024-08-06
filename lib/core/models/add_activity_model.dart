@@ -1,21 +1,21 @@
 import 'dart:convert';
 
 // Define the TimeSlot class
-class TimeSlot {
+class TimeSlotAddActivity {
   String start;
   String end;
   String activity;
   bool availExtraService;
 
-  TimeSlot({
+  TimeSlotAddActivity({
     required this.start,
     required this.end,
     required this.activity,
     required this.availExtraService,
   });
 
-  factory TimeSlot.fromJson(Map<String, dynamic> json) {
-    return TimeSlot(
+  factory TimeSlotAddActivity.fromJson(Map<String, dynamic> json) {
+    return TimeSlotAddActivity(
       start: json['start'],
       end: json['end'],
       activity: json['activity'],
@@ -37,7 +37,7 @@ class TimeSlot {
 class Slot {
   String date;
   String dayOfWeek;
-  List<TimeSlot> timeSlots;
+  List<TimeSlotAddActivity> timeSlots;
 
   Slot({
     required this.date,
@@ -47,8 +47,8 @@ class Slot {
 
   factory Slot.fromJson(Map<String, dynamic> json) {
     var list = json['timeSlots'] as List;
-    List<TimeSlot> timeSlotList =
-        list.map((i) => TimeSlot.fromJson(i)).toList();
+    List<TimeSlotAddActivity> timeSlotList =
+        list.map((i) => TimeSlotAddActivity.fromJson(i)).toList();
 
     return Slot(
       date: json['date'],
@@ -67,17 +67,17 @@ class Slot {
 }
 
 // Define the Week class
-class Week {
+class WeekActivity {
   String week;
   Slot slot;
 
-  Week({
+  WeekActivity({
     required this.week,
     required this.slot,
   });
 
-  factory Week.fromJson(Map<String, dynamic> json) {
-    return Week(
+  factory WeekActivity.fromJson(Map<String, dynamic> json) {
+    return WeekActivity(
       week: json['week'],
       slot: Slot.fromJson(json['slot']),
     );
@@ -92,13 +92,13 @@ class Week {
 }
 
 // Function to parse JSON string to Week object
-Week parseWeek(String jsonStr) {
+WeekActivity parseWeek(String jsonStr) {
   final jsonData = jsonDecode(jsonStr);
-  return Week.fromJson(jsonData);
+  return WeekActivity.fromJson(jsonData);
 }
 
 // Function to convert Week object to JSON string
-String weekToJson(Week week) {
+String weekToJson(WeekActivity week) {
   final jsonData = week.toJson();
   return jsonEncode(jsonData);
 }
@@ -124,7 +124,7 @@ void main() {
   ''';
 
   // Parse JSON string to Week object
-  Week week = parseWeek(jsonString);
+  WeekActivity week = parseWeek(jsonString);
 
   // Print Week object
   print('Week: ${week.week}');

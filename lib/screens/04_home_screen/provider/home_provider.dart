@@ -10,6 +10,7 @@ import 'package:ibiza/core/api/response_model.dart';
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/constants/enums.dart';
 import 'package:ibiza/core/constants/storage_keys.dart';
+import 'package:ibiza/core/models/add_activity_model.dart';
 import 'package:ibiza/core/models/calender_model.dart';
 import 'package:ibiza/core/models/most_popular_post.dart';
 import 'package:ibiza/core/view_model/base_view_model.dart';
@@ -81,6 +82,7 @@ class HomeProvider extends BaseViewModel {
     }
   }
 
+  ///
   ///------------Section 3 Provider----------------
 
   int get selectedDays => _selectedDayIndices.length;
@@ -219,6 +221,22 @@ class HomeProvider extends BaseViewModel {
     _popularModel = null;
 
     notifyListeners();
+  }
+
+  ///--------------getActivtityToCalendaar-----
+  void getActivityToCalendar(WeekActivity weekActivity) async {
+    try {
+      final response = await APIRequests.makePostRequest(Endpoints.getCalender,
+          {'Content-Type': 'application/json'}, weekActivity.toJson());
+
+      if (!response.error) {
+        print('Success: ${response.body}');
+      } else {
+        print('Error: ${response.message}');
+      }
+    } catch (e) {
+      print('Exception: $e');
+    }
   }
 
   ///

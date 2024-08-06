@@ -89,9 +89,7 @@ class LoginProvider extends BaseViewModel {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Authorization': "Bearer $_authtoken",
         },
-        {
-          'token': otp
-        },
+        {'token': otp},
         expectedStatus: 200,
       );
       Fluttertoast.showToast(msg: data.body['message']);
