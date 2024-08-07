@@ -178,7 +178,7 @@ class HomeProvider extends BaseViewModel {
     notifyListeners();
   }
 
-  ///==============Section 4 ====================
+  ///==============Section 4 ===================
   bool showCustomDate = false;
 
   showDate() {
