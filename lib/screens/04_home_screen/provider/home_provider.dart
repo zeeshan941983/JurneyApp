@@ -17,6 +17,7 @@ import 'package:ibiza/core/view_model/base_view_model.dart';
 import 'package:ibiza/core/widgets/show_add_app_dialouge.dart';
 import 'package:ibiza/screens/04_home_screen/models/card_model.dart';
 import 'package:ibiza/screens/04_home_screen/models/sites_model.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -337,6 +338,37 @@ class HomeProvider extends BaseViewModel {
     }
     return false;
   }
+
+////==========genral providers==========///
+  ///getDateTimeFromWeekDayTime
+  String getStartOfWeek(DateTime date) {
+    int daysToSubtract = date.weekday % 7;
+    DateFormat formatter = DateFormat('yyyy-MM-dd');
+
+    return formatter.format(date.subtract(Duration(days: daysToSubtract)));
+  }
+
+////getDateFrom eg 2024-05-29
+  String setdateformate(DateTime date) {
+    DateFormat formatter = DateFormat('yyyy-MM-dd');
+    return formatter.format(date);
+  }
+
+////getTimeFrom 12:00
+  String setTimeForm(DateTime date) {
+    DateFormat sDateFormate = DateFormat('hh:mm');
+    return sDateFormate.format(date);
+  }
+  ////getdaysFrom
+
+  String setDaysFromDate(DateTime date) {
+    String formate = DateFormat('EEEE').format(date);
+    return formate;
+  }
+
+  ///
+
+  ///
 }
 
 class DataSource extends CalendarDataSource {
