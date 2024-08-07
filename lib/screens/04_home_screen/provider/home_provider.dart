@@ -226,9 +226,16 @@ class HomeProvider extends BaseViewModel {
 
   ///--------------getActivtityToCalendaar-----
   void getActivityToCalendar(WeekActivity weekActivity) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(USER_TOKEN);
     try {
-      final response = await APIRequests.makePostRequest(Endpoints.getCalender,
-          {'Content-Type': 'application/json'}, weekActivity.toJson());
+      final response = await APIRequests.makePostRequest(
+          Endpoints.getCalender,
+          {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          weekActivity.toJson());
 
       if (!response.error) {
         print('Success: ${response.body}');

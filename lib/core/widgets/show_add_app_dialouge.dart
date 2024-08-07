@@ -164,20 +164,16 @@ void showAddAppointmentDialog(
               fontWeight: FontWeight.w500,
               text: 'Save',
               onTap: () {
-                String formattedDate = provider.setdateformate(selectedDate);
-
-                String weekofday = DateFormat('EEEE').format(selectedDate);
-                // print(provider.getStartOfWeek(provider.date));
                 String week = provider.getStartOfWeek(selectedDate);
                 String selecteddate = provider.setdateformate(selectedDate);
-                String Weekofday = provider.setDaysFromDate(selectedDate);
+                String weekofday = provider.setDaysFromDate(selectedDate);
                 String starttime = provider.setTimeForm(selectedDate);
                 String endTime = provider.setTimeForm(
                   selectedDate.add(
                     provider.duration,
                   ),
                 );
-                print(provider.populardata!.id);
+
                 if (formKey.currentState!.validate()) {
                   String? subject = provider.populardata?.title;
                   if (subject != "") {
@@ -194,17 +190,17 @@ void showAddAppointmentDialog(
                         week: week,
                         slot: Slot(
                             date: selecteddate,
-                            dayOfWeek: Weekofday,
+                            dayOfWeek: weekofday,
                             timeSlots: [
                               TimeSlotAddActivity(
                                   start: starttime,
                                   end: endTime,
-                                  activity: "66a0ceea9e093522a6fb3776",
+                                  activity: "665af8ff9ec8d6048a293cc2",
                                   availExtraService: true)
                             ]));
                     provider.getActivityToCalendar(weekActivity);
-                    // Provider.of<HomeProvider>(context, listen: false)
-                    //     .setAppointment(newAppointment);
+                    Provider.of<HomeProvider>(context, listen: false)
+                        .setAppointment(newAppointment);
 
                     Navigator.of(context).pop();
                   }
