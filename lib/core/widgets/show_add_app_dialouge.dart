@@ -96,17 +96,6 @@ void showAddAppointmentDialog(
                       fontSize: 14.sp,
                     ),
                     children: [
-                      // DurationPicker(
-                      //   height: 200.h,
-                      //   baseUnit: BaseUnit.hour,
-                      //   snapToMins: 200,
-                      //   lowerBound: const Duration(minutes: 100),
-                      //   duration: provider.duration,
-                      //   onChange: (val) {
-                      //     provider.setDuration(val);
-                      //   },
-                      // ),
-
                       SizedBox(
                         height: 65.h,
                         child: ListWheelScrollView.useDelegate(
@@ -168,11 +157,9 @@ void showAddAppointmentDialog(
                 String selecteddate = provider.setdateformate(selectedDate);
                 String weekofday = provider.setDaysFromDate(selectedDate);
                 String starttime = provider.setTimeForm(selectedDate);
-                String endTime = provider.setTimeForm(
-                  selectedDate.add(
-                    provider.duration,
-                  ),
+                String endTime = provider.setTimeForm(selectedDate.add(provider.duration),
                 );
+                print("here is key ${provider.populardata!.id}");
 
                 if (formKey.currentState!.validate()) {
                   String? subject = provider.populardata?.title;
@@ -195,7 +182,7 @@ void showAddAppointmentDialog(
                               TimeSlotAddActivity(
                                   start: starttime,
                                   end: endTime,
-                                  activity: "665af8ff9ec8d6048a293cc2",
+                                  activity: provider.populardata!.id,
                                   availExtraService: true)
                             ]));
                     provider.getActivityToCalendar(weekActivity);

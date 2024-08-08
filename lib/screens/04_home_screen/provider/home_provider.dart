@@ -228,14 +228,17 @@ class HomeProvider extends BaseViewModel {
   void getActivityToCalendar(WeekActivity weekActivity) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(USER_TOKEN);
+    var header = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    var body = weekActivity.toJson();
     try {
       final response = await APIRequests.makePostRequest(
-          Endpoints.getCalender,
-          {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer $token',
-          },
-          weekActivity.toJson());
+        Endpoints.getCalender,
+        header,
+        body,
+      );
 
       if (!response.error) {
         print('Success: ${response.body}');
@@ -246,6 +249,47 @@ class HomeProvider extends BaseViewModel {
       print('Exception: $e');
     }
   }
+
+   
+  ///--------------getActivtityToCalendarFun-----
+  // save(){
+  //             String week = getStartOfWeek(selectedDate);
+  //               String selecteddate = setdateformate(selectedDate);
+  //               String weekofday = setDaysFromDate(selectedDate);
+  //               String starttime = setTimeForm(selectedDate);
+  //               String endTime = setTimeForm(selectedDate.add(duration),
+  //               );
+  //               if (formKey.currentState!.validate()) {
+  //                 String? subject = populardata?.title;
+  //                 if (subject != "") {
+  //                   final Appointment newAppointment = Appointment(
+  //                     subject: subject!,
+  //                     startTime: selectedDate,
+  //                     endTime: selectedDate.add(
+  //                       duration,
+  //                     ),
+  //                     color: getRandomColorWithOpacity(0.6),
+  //                   );
+
+  //                   WeekActivity weekActivity = WeekActivity(
+  //                       week: week,
+  //                       slot: Slot(
+  //                           date: selecteddate,
+  //                           dayOfWeek: weekofday,
+  //                           timeSlots: [
+  //                             TimeSlotAddActivity(
+  //                                 start: starttime,
+  //                                 end: endTime,
+  //                                 activity: populardata!.id,
+  //                                 availExtraService: true)
+  //                           ]));
+  //                   getActivityToCalendar(weekActivity);
+  //                  setAppointment(newAppointment);
+  //                   Navigator.of(context).pop();
+  //                 }
+  //               }
+  //              clearPopularData();
+  // }
 
   ///
   changeState({Function? fun}) {
