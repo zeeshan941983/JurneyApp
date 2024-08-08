@@ -157,7 +157,8 @@ void showAddAppointmentDialog(
                 String selecteddate = provider.setdateformate(selectedDate);
                 String weekofday = provider.setDaysFromDate(selectedDate);
                 String starttime = provider.setTimeForm(selectedDate);
-                String endTime = provider.setTimeForm(selectedDate.add(provider.duration),
+                String endTime = provider.setTimeForm(
+                  selectedDate.add(provider.duration),
                 );
                 print("here is key ${provider.populardata!.id}");
 
@@ -188,7 +189,8 @@ void showAddAppointmentDialog(
                     provider.getActivityToCalendar(weekActivity);
                     Provider.of<HomeProvider>(context, listen: false)
                         .setAppointment(newAppointment);
-
+                    provider.getCalenders();
+                    print(week);
                     Navigator.of(context).pop();
                   }
                 }
