@@ -5,6 +5,47 @@ import 'package:ibiza/core/api/response_model.dart';
 
 class APIRequests {
   static bool isdynamic = false;
+  static Future<ResponseModel> makePostRequestlogin(
+    String url,
+    Map<String, String> headers,
+    Map<String, String> body, {
+    int? expectedStatus = 200,
+  }) async {
+    try {
+      var request = http.Request('POST', Uri.parse(url));
+      request.bodyFields = body;
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+
+      String responseBody = await response.stream.bytesToString();
+      log(response.statusCode.toString());
+      log(responseBody);
+
+      if (response.statusCode == expectedStatus) {
+        return ResponseModel(
+          error: false,
+          statusCode: response.statusCode,
+          body: json.decode(responseBody),
+        );
+      } else {
+        return ResponseModel(
+          error: true,
+          statusCode: response.statusCode,
+          body: json.decode(responseBody),
+          message: 'Failed to load data: ${response.reasonPhrase}',
+        );
+      }
+    } catch (e) {
+      return ResponseModel(
+        error: true,
+        statusCode: null,
+        body: null,
+        message: e.toString(),
+      );
+    }
+  }
+
   static Future<ResponseModel> makePostRequest(
     String url,
     Map<String, String> headers,

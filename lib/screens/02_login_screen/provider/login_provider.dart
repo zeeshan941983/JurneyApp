@@ -120,7 +120,7 @@ class LoginProvider extends BaseViewModel {
   }) async {
     setState(ViewState.busy);
     try {
-      final data = await APIRequests.makePostRequest(
+      final data = await APIRequests.makePostRequestlogin(
         Endpoints.login,
         {
           'Content-Type': 'application/x-www-form-urlencoded',
