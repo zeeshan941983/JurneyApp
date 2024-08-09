@@ -102,38 +102,3 @@ String weekToJson(WeekActivity week) {
   final jsonData = week.toJson();
   return jsonEncode(jsonData);
 }
-
-void main() {
-  // Example JSON string
-  String jsonString = '''
-  {
-      "week": "2024-06-30",
-      "slot":{
-        "date":"2024-05-29",
-        "dayOfWeek": "Friday",
-        "timeSlots": [
-          {
-            "start": "15:00",
-            "end": "19:30",
-            "activity": "66a0ceea9e093522a6fb3776",
-            "availExtraService": true
-          }
-        ]
-      }
-  }
-  ''';
-
-  // Parse JSON string to Week object
-  WeekActivity week = parseWeek(jsonString);
-
-  // Print Week object
-  print('Week: ${week.week}');
-  print('Slot Date: ${week.slot.date}');
-  print('Slot DayOfWeek: ${week.slot.dayOfWeek}');
-  print('First TimeSlot Start: ${week.slot.timeSlots[0].start}');
-  print('First TimeSlot End: ${week.slot.timeSlots[0].end}');
-
-  // Convert Week object to JSON string
-  String jsonStringFromObject = weekToJson(week);
-  print('JSON String from Object: $jsonStringFromObject');
-}

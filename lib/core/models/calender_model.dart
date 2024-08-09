@@ -142,22 +142,42 @@ class Address {
 class Activity {
   final String id;
   final String title;
-  final Address address;
+  final Address? address; // Nullable
   final int price;
+  final int? extras; // Nullable, to handle cases where extras might be null
+  final String? extraMessage; // Nullable, to handle cases where extra_message might be null
 
   Activity({
     required this.id,
     required this.title,
-    required this.address,
+    this.address,
     required this.price,
+    this.extras,
+    this.extraMessage,
   });
 
   factory Activity.fromJson(Map<String, dynamic> json) {
+    print('Parsing Activity with json: $json');
+
+    String? addressString = json['address'];
+    Address? addressObj;
+
+    if (addressString != null) {
+      try {
+        addressObj = Address.fromJson(jsonDecode(addressString));
+      } catch (e) {
+        print('Error parsing address: $e');
+        addressObj = null;
+      }
+    }
+
     return Activity(
-      id: json['id'],
+      id: json['_id'],
       title: json['title'],
-      address: Address.fromJson(jsonDecode(json['address'])),
+      address: addressObj,
       price: json['price'],
+      extras: json['extras'], // Assuming this can be null
+      extraMessage: json['extra_message'], // Assuming this can be null
     );
   }
 
@@ -165,8 +185,10 @@ class Activity {
     return {
       'id': id,
       'title': title,
-      'address': jsonEncode(address.toJson()),
+      'address': address != null ? jsonEncode(address!.toJson()) : null,
       'price': price,
+      'extras': extras,
+      'extra_message': extraMessage,
     };
   }
 }

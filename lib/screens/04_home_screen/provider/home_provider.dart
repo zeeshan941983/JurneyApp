@@ -109,35 +109,65 @@ class HomeProvider extends BaseViewModel {
 
   DateTime date = DateTime.now();
 
-  Future<void> getCalenders() async {
-    final prefs = await SharedPreferences.getInstance();
-    final cookie = prefs.getString('GUEST_COOKIE');
-    ResponseModel response = ResponseModel.empty();
-    if (cookie != null) {
-      response = await APIRequests.makeGetRequest(Endpoints.getCalender, {
-        'Cookie': cookie,
-      }, {});
-    } else {
-      response =
-          await APIRequests.makeGetRequest(Endpoints.getCalender, {}, {});
-      prefs.setString(
-          'GUEST_COOKIE', response.header['set-cookie']?.split(';').first);
-      getCalenders();
-    }
-    if (response.error) {
+  // Future<void> getCalenders() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final cookie = prefs.getString('GUEST_COOKIE');
+  //   ResponseModel response = ResponseModel.empty();
+  //   if (cookie != null) {
+  //     response = await APIRequests.makeGetRequest(Endpoints.getCalender, {
+  //       'Cookie': cookie,
+  //     }, {});
+  //   } else {
+  //     response =
+  //         await APIRequests.makeGetRequest(Endpoints.getCalender, {}, {});
+  //     prefs.setString(
+  //         'GUEST_COOKIE', response.header['set-cookie']?.split(';').first);
+  //     getCalenders();
+  //   }
+  //   if (response.error) {
+  //     Fluttertoast.showToast(msg: response.message.toString());
+  //     return;
+  //   }
+  //   final data = response.body['data'];
+  //   if (data != null) {
+  //     final calenders = CalenderModel.fromJson(convertStringToJson(data));
+  //     _listOfUserAppointments = getAppointments(calenders);
+  //     log(_listOfUserAppointments.length.toString());
+  //     setUserAppointments();
+  //     notifyListeners();
+  //   }
+  // }
+
+   getCalenders() async {
+     final prefs = await SharedPreferences.getInstance();
+     String? token = prefs.getString(USER_TOKEN);
+     var header = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+     final response = await APIRequests.makeGetRequest(
+        Endpoints.getCalender,
+        header,
+        {},
+      );
+
+      if (response.error) {
       Fluttertoast.showToast(msg: response.message.toString());
       return;
     }
-    final data = response.body['data'];
-    if (data != null) {
-      final calenders = CalenderModel.fromJson(convertStringToJson(data));
-      _listOfUserAppointments = getAppointments(calenders);
-      log(_listOfUserAppointments.length.toString());
-      setUserAppointments();
-      notifyListeners();
-    }
-  }
 
+        print('Success: ${response.body}');
+        print('get calender APi message: ${response.message}');
+      final data = response.body['data'];
+      if (data != null) {
+        _listOfUserAppointments.clear();
+        final calenders = CalenderModel.fromJson(convertStringToJson(data));
+        _listOfUserAppointments = getAppointments(calenders);
+        log(_listOfUserAppointments.length.toString());
+        setUserAppointments();
+        notifyListeners();
+      }
+   }
   List<Appointment> getAppointments(CalenderModel calendar) {
     List<Appointment> appointment = [];
     for (var week in calendar.weeks) {
@@ -154,7 +184,7 @@ class HomeProvider extends BaseViewModel {
           appointment.add(Appointment(
             id: time.activity.id,
             subject: time.activity.title,
-            location: time.activity.address.description,
+            location: time.activity.address!.description,
             startTime: startTime,
             endTime: endTime,
             color: getRandomColorWithOpacity(0.6),
@@ -250,48 +280,6 @@ class HomeProvider extends BaseViewModel {
     }
   }
 
-   
-  ///--------------getActivtityToCalendarFun-----
-  // save(){
-  //             String week = getStartOfWeek(selectedDate);
-  //               String selecteddate = setdateformate(selectedDate);
-  //               String weekofday = setDaysFromDate(selectedDate);
-  //               String starttime = setTimeForm(selectedDate);
-  //               String endTime = setTimeForm(selectedDate.add(duration),
-  //               );
-  //               if (formKey.currentState!.validate()) {
-  //                 String? subject = populardata?.title;
-  //                 if (subject != "") {
-  //                   final Appointment newAppointment = Appointment(
-  //                     subject: subject!,
-  //                     startTime: selectedDate,
-  //                     endTime: selectedDate.add(
-  //                       duration,
-  //                     ),
-  //                     color: getRandomColorWithOpacity(0.6),
-  //                   );
-
-  //                   WeekActivity weekActivity = WeekActivity(
-  //                       week: week,
-  //                       slot: Slot(
-  //                           date: selecteddate,
-  //                           dayOfWeek: weekofday,
-  //                           timeSlots: [
-  //                             TimeSlotAddActivity(
-  //                                 start: starttime,
-  //                                 end: endTime,
-  //                                 activity: populardata!.id,
-  //                                 availExtraService: true)
-  //                           ]));
-  //                   getActivityToCalendar(weekActivity);
-  //                  setAppointment(newAppointment);
-  //                   Navigator.of(context).pop();
-  //                 }
-  //               }
-  //              clearPopularData();
-  // }
-
-  ///
   changeState({Function? fun}) {
     fun;
     notifyListeners;
