@@ -49,7 +49,7 @@ class APIRequests {
   static Future<ResponseModel> makePostRequest(
     String url,
     Map<String, String> headers,
-    Map<String, dynamic> body, {
+    Map body, {
     int? expectedStatus = 200,
   }) async {
     try {
