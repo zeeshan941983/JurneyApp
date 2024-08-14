@@ -285,7 +285,7 @@ class HomeProvider extends BaseViewModel {
     notifyListeners;
   }
 
-  Duration _duration = const Duration(hours: 1);
+  Duration _duration = const Duration(minutes: 30);
   Duration get duration => _duration;
   void setDuration(Duration newDuration) {
     _duration = newDuration;

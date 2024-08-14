@@ -99,34 +99,30 @@ void showAddAppointmentDialog(
                       SizedBox(
                         height: 65.h,
                         child: ListWheelScrollView.useDelegate(
-                          itemExtent: 50,
-                          useMagnifier: true,
-                          onSelectedItemChanged: (index) {
-                            print(index * 30);
-                            provider.setDuration(Duration(minutes: index * 30));
-                          },
-                          childDelegate: ListWheelChildBuilderDelegate(
-                            builder: (context, index) {
-                              final hours = index ~/ 2;
-                              final minutes = (index % 2) * 30;
-                              final displayText = minutes == 0
-                                  ? '$hours h'
-                                  : '$hours : ${minutes ~/ 30 * 30} h';
-                              return InkWell(
-                                onTap: () {
-                                  // provider.setDuration(Duration(minutes: index * 30));
-                                },
-                                child: Center(
-                                  child: Text(
-                                    displayText,
-                                    style: const TextStyle(fontSize: 24),
-                                  ),
+                        itemExtent: 50,
+                        useMagnifier: true,
+                        onSelectedItemChanged: (index) {
+                          provider.setDuration(Duration(minutes: (index + 1) * 30));
+                        },
+                        childDelegate: ListWheelChildBuilderDelegate(
+                          builder: (context, index) {
+                            final hours = (index + 1) ~/ 2;
+                            final minutes = ((index + 1) % 2) * 30;
+                            final displayText = minutes == 0 ? '$hours h' : '$hours:${minutes ~/ 30 * 30} h';
+                            return InkWell(
+                              onTap: () {
+                                // provider.setDuration(Duration(minutes: (index + 1) * 30));
+                              },
+                              child: Center(
+                                child: Text(
+                                  displayText,
+                                  style: const TextStyle(fontSize: 24),
                                 ),
-                              );
-                            },
-                            childCount:
-                                24 * 2, // 24 hours, half-hour increments
-                          ),
+                              ),
+                            );
+                          },
+                          childCount: 24 * 2 - 1, // 24 hours, half-hour increments
+                        ),
                         ),
                       )
                     ],
