@@ -42,7 +42,7 @@ class LoginProvider extends BaseViewModel {
   }) async {
     setState(ViewState.busy);
     try {
-      final data = await APIRequests.makePostRequest(
+      final data = await APIRequests.makePostRequestlogin(
         Endpoints.register,
         {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -56,7 +56,6 @@ class LoginProvider extends BaseViewModel {
         expectedStatus: 201,
       );
       Fluttertoast.showToast(msg: data.body['message']);
-
       if (!data.error && data.statusCode == 201) {
         _authtoken = data.body['data'];
         // setauthtoken(_authtoken);
@@ -97,7 +96,6 @@ class LoginProvider extends BaseViewModel {
       if (!data.error && data.statusCode == 200) {
         _verified = true;
         setState(ViewState.idle);
-
         return true;
       } else {
         _verified = false;

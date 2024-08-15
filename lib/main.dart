@@ -17,9 +17,7 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp
-  ]);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());
 }
 
@@ -50,12 +48,13 @@ class MyApp extends StatelessWidget {
           title: 'IBIZA Journey',
           theme: ThemeData(
             fontFamily: outfit,
-            colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1E99A1)),
+            colorScheme:
+                ColorScheme.fromSeed(seedColor: const Color(0xFF1E99A1)),
             useMaterial3: true,
           ),
           initialRoute: '/',
           onGenerateRoute: AppRoutes.generateRoutes,
-          // home: const DashboardScreen(),
+          // home: const Datashow(),
         ),
       ),
     );
@@ -120,10 +119,7 @@ class _TestingAPIsState extends State<TestingAPIs> {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Authorization': '',
                   },
-                  {
-                    'email': 'ubaidxdev@gmail.com',
-                    'password': '12345678'
-                  },
+                  {'email': 'ubaidxdev@gmail.com', 'password': '12345678'},
                 );
                 log(data.toString());
                 setState(() {

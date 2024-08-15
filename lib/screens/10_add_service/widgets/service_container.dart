@@ -3,16 +3,14 @@ import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
 
 class ServicesContainer extends StatelessWidget {
-  const ServicesContainer({
-    super.key,
-    required this.icon,
-    required this.title,
-  });
+  const ServicesContainer(
+      {super.key, required this.icon, required this.title, this.onTap});
   final String icon, title;
+  final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 74.h,
+      height: 65.h,
       width: 155.w,
       margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(10),
