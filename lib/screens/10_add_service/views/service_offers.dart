@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
+import 'package:ibiza/core/models/category_model.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
 import 'package:ibiza/core/widgets/custom_loader.dart';
 import 'package:ibiza/screens/04_home_screen/models/sites_model.dart';
@@ -30,7 +31,7 @@ class ServiceOffers extends StatelessWidget {
             fontWeight: FontWeight.w400,
           ),
           Consumer<ServiceProvider>(
-            builder: (context, provider, child) => FutureBuilder<List<Categories>>(
+            builder: (context, provider, child) => FutureBuilder<List<Category>>(
               future: provider.getServicesOffers(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting && provider.serviceOffers.isEmpty) {
@@ -44,7 +45,7 @@ class ServiceOffers extends StatelessWidget {
                     children: List.generate(
                       services?.length ?? 0,
                       (index) => ServicesContainer(
-                        icon: services?[index].icon ?? AppImages.wind,
+                        icon: services?[index].iconURL ?? AppImages.wind,
                         title: services?[index].name ?? 'Windy',
                       ),
                     ),

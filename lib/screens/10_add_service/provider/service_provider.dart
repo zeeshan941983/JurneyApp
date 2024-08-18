@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/api/endpoints.dart';
 import 'package:ibiza/core/api/requests.dart';
+import 'package:ibiza/core/models/category_model.dart';
 import 'package:ibiza/core/view_model/base_view_model.dart';
 import 'package:ibiza/screens/04_home_screen/models/sites_model.dart';
 
@@ -108,16 +109,16 @@ class ServiceProvider extends BaseViewModel {
   }
 
   ///Amenties/Services Offers
-  List<Categories> _serviceOffers = [];
-  List<Categories> get serviceOffers => _serviceOffers;
-  set serviceOffers(List<Categories> serOffers) {
+  List<Category> _serviceOffers = [];
+  List<Category> get serviceOffers => _serviceOffers;
+  set serviceOffers(List<Category> serOffers) {
     _serviceOffers = serOffers;
     notifyListeners();
   }
 
-  Future<List<Categories>>? getServicesOffers() async {
+  Future<List<Category>>? getServicesOffers() async {
     try {
-      final response = await APIRequests.makeGetRequest(Endpoints.getserviceOffers, {}, {});
+      final response = await APIRequests.makeGetRequest(Endpoints.activityCategories, {}, {});
 
       if (response.error) {
         log('Error fetching Offers: ${response.message}');
@@ -125,11 +126,14 @@ class ServiceProvider extends BaseViewModel {
         getServicesOffers();
         return [];
       }
-
-      serviceOffers = (response.body as List).map((c) {
-        return Categories.fromJSON(c);
+    
+        log('Response body: ${response.body.runtimeType} - ${response.body}');
+       List<Map<String, dynamic>> responseBody = response.body.cast<Map<String, dynamic>>();
+      serviceOffers = responseBody.map((c) {
+        return Category.fromJson(c);
       }).toList();
-
+      
+        log("here is final data ${serviceOffers.length} ${serviceOffers[0].name}");
       notifyListeners();
       return serviceOffers;
     } catch (e) {
@@ -139,4 +143,5 @@ class ServiceProvider extends BaseViewModel {
       return [];
     }
   }
+ 
 }

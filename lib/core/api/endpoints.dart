@@ -3,8 +3,7 @@ class Endpoints {
   static const String user = "$url/user";
   static const String categories = "$url/categories";
   static const String popularService = "$url/services/popular";
-  static const String subcategories = "$categories/SubCategories";
-  static String catSubCtegories(v) => "$categories/$v/sub-categories";
+  static const String activityCategories = "$categories/subCategories";
   static const String addActivityToCallender = "$url/calender";
   //Registeration
   static const String register = "$user/register";
