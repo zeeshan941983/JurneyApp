@@ -1,28 +1,32 @@
-class Category {
+class Category_Model {
   String id;
   String name;
   List<SubCategory> subCategories;
   List<PriceModel> priceModel;
   String iconURL;
 
-  Category({
+  Category_Model({
     this.id = '',
     this.name = '',
     this.subCategories = const [],
     this.priceModel = const [],
     this.iconURL = '',
   });
-
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
+  factory Category_Model.fromJson(Map<String, dynamic> json) {
+    return Category_Model(
       id: json['_id'] ?? '',
       name: json['name'] ?? '',
-      subCategories: (json['subCategories'] ?? []).map((e) => SubCategory.fromJson(e)).toList(),
-      priceModel: (json['priceModel'] ?? []).map((e) => PriceModel.fromJson(e)).toList(),
+      subCategories: (json['subCategories'] as List<dynamic>? ?? [])
+          .map((e) => SubCategory.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      priceModel: (json['priceModel'] as List<dynamic>? ?? [])
+          .map((e) => PriceModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
       iconURL: json['iconURL'] ?? '',
     );
   }
 }
+
 class SubCategory {
   String id;
   String name;
@@ -34,7 +38,7 @@ class SubCategory {
 
   factory SubCategory.fromJson(Map<String, dynamic> json) {
     return SubCategory(
-      id: json['id'],
+      id: json['_id'],
       name: json['name'],
     );
   }
@@ -51,7 +55,7 @@ class PriceModel {
 
   factory PriceModel.fromJson(Map<String, dynamic> json) {
     return PriceModel(
-      id: json['id'],
+      id: json['_id'],
       name: json['name'],
     );
   }

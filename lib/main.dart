@@ -52,9 +52,37 @@ class MyApp extends StatelessWidget {
                 ColorScheme.fromSeed(seedColor: const Color(0xFF1E99A1)),
             useMaterial3: true,
           ),
-          initialRoute: '/',
-          onGenerateRoute: AppRoutes.generateRoutes,
-          // home: const Datashow(),
+          // initialRoute: '/',
+          // onGenerateRoute: AppRoutes.generateRoutes,
+          home: const Testinev(),
+        ),
+      ),
+    );
+  }
+}
+
+class Testinev extends StatefulWidget {
+  const Testinev({super.key});
+
+  @override
+  State<Testinev> createState() => _TestinevState();
+}
+
+class _TestinevState extends State<Testinev> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Consumer<ServiceProvider>(
+        builder: (context, value, child) => Column(
+          children: [
+            Center(
+              child: ElevatedButton(
+                  onPressed: () {
+                    value.getServicesOffers();
+                  },
+                  child: Text("data")),
+            )
+          ],
         ),
       ),
     );

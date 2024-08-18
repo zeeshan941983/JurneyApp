@@ -25,16 +25,19 @@ class ServiceOffers extends StatelessWidget {
           ),
           5.h.ph,
           AppText(
-            text: 'Your address is only shared with guest after they’ve made a reservation',
+            text:
+                'Your address is only shared with guest after they’ve made a reservation',
             fontSize: 14.sp,
             color: AppColors.col6A6A6A,
             fontWeight: FontWeight.w400,
           ),
           Consumer<ServiceProvider>(
-            builder: (context, provider, child) => FutureBuilder<List<Category>>(
+            builder: (context, provider, child) =>
+                FutureBuilder<List<Category_Model>>(
               future: provider.getServicesOffers(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting && provider.serviceOffers.isEmpty) {
+                if (snapshot.connectionState == ConnectionState.waiting &&
+                    provider.serviceOffers.isEmpty) {
                   return const CustomLoader();
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));

@@ -86,7 +86,8 @@ class ServiceProvider extends BaseViewModel {
 
   Future<List<Categories>>? getConditions() async {
     try {
-      final response = await APIRequests.makeGetRequest(Endpoints.getserviceConditions, {}, {});
+      final response = await APIRequests.makeGetRequest(
+          Endpoints.getserviceConditions, {}, {});
 
       if (response.error) {
         log('Error fetching Conditions: ${response.message}');
@@ -109,39 +110,41 @@ class ServiceProvider extends BaseViewModel {
   }
 
   ///Amenties/Services Offers
-  List<Category> _serviceOffers = [];
-  List<Category> get serviceOffers => _serviceOffers;
-  set serviceOffers(List<Category> serOffers) {
+  List<Category_Model> _serviceOffers = [];
+  List<Category_Model> get serviceOffers => _serviceOffers;
+  set serviceOffers(List<Category_Model> serOffers) {
     _serviceOffers = serOffers;
     notifyListeners();
   }
 
-  Future<List<Category>>? getServicesOffers() async {
+  Future<List<Category_Model>> getServicesOffers() async {
     try {
-      final response = await APIRequests.makeGetRequest(Endpoints.activityCategories, {}, {});
+      final response = await APIRequests.makeGetRequest(
+          Endpoints.activityCategories, {}, {});
 
       if (response.error) {
         log('Error fetching Offers: ${response.message}');
         await Future.delayed(const Duration(seconds: 2));
-        getServicesOffers();
         return [];
       }
-    
-        log('Response body: ${response.body.runtimeType} - ${response.body}');
-       List<Map<String, dynamic>> responseBody = response.body.cast<Map<String, dynamic>>();
+
+      List<Map<String, dynamic>> responseBody =
+          response.body.cast<Map<String, dynamic>>();
       serviceOffers = responseBody.map((c) {
-        return Category.fromJson(c);
+        return Category_Model.fromJson(c);
       }).toList();
-      
-        log("here is final data ${serviceOffers.length} ${serviceOffers[0].name}");
+
+      // log("here is final data ${serviceOffers.length} ${serviceOffers[0].name}");
+      for (var offer in serviceOffers) {
+        log(" Data :${offer.name}");
+      }
+      log(" length: ${serviceOffers.length}");
       notifyListeners();
       return serviceOffers;
     } catch (e) {
       log('Exception occurred: $e');
       await Future.delayed(const Duration(seconds: 2));
-      getServicesOffers();
       return [];
     }
   }
- 
 }
