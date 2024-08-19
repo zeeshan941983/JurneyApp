@@ -6,6 +6,10 @@ import 'package:ibiza/core/widgets/app_text.dart';
 import 'package:ibiza/core/widgets/custom_app_bar.dart';
 import 'package:ibiza/core/widgets/custom_loader.dart';
 import 'package:ibiza/screens/10_add_service/provider/service_provider.dart';
+import 'package:ibiza/screens/10_add_service/views/Calendar_activity_add.dart';
+import 'package:ibiza/screens/10_add_service/views/Create_Discription.dart';
+import 'package:ibiza/screens/10_add_service/views/ServiceTitle.dart';
+import 'package:ibiza/screens/10_add_service/views/confirm_reservation.dart';
 import 'package:ibiza/screens/10_add_service/views/service_address.dart';
 import 'package:ibiza/screens/10_add_service/views/service_condition.dart';
 import 'package:ibiza/screens/10_add_service/views/service_location.dart';
@@ -13,6 +17,7 @@ import 'package:ibiza/screens/10_add_service/views/service_offers.dart';
 import 'package:ibiza/screens/10_add_service/views/service_people_count.dart';
 import 'package:ibiza/screens/10_add_service/views/service_photos.dart';
 import 'package:ibiza/screens/10_add_service/views/service_type.dart';
+import 'package:ibiza/screens/10_add_service/views/set_price.dart';
 import 'package:provider/provider.dart';
 
 class AddServiceScreen extends StatefulWidget {
@@ -45,7 +50,9 @@ class _UserDetailsScreenState extends State<AddServiceScreen> {
                           child: IconButton(
                             onPressed: () {
                               if (_pageController.page != 0) {
-                                _pageController.previousPage(duration: Durations.extralong3, curve: Curves.ease);
+                                _pageController.previousPage(
+                                    duration: Durations.extralong3,
+                                    curve: Curves.ease);
                               } else {
                                 provider.addService = false;
                               }
@@ -69,7 +76,12 @@ class _UserDetailsScreenState extends State<AddServiceScreen> {
                               ServicePeopleCount(),
                               ServiceCondition(),
                               ServiceOffers(),
-                              ServicePhotos()
+                              ServicePhotos(),
+                              ServiceTitle(),
+                              CreateDiscription(),
+                              ConfirmReservation(),
+                              CalendarActivityAdd(),
+                              SetPrice(),
                             ],
                           ),
                         ),
@@ -80,7 +92,9 @@ class _UserDetailsScreenState extends State<AddServiceScreen> {
                             width: 98.w,
                             height: 45.h,
                             radius: 35.r,
-                            onTap: () => _pageController.nextPage(duration: Durations.extralong3, curve: Curves.ease),
+                            onTap: () => _pageController.nextPage(
+                                duration: Durations.extralong3,
+                                curve: Curves.ease),
                           ),
                         ),
                         15.h.ph,

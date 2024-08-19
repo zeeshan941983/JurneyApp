@@ -3,7 +3,7 @@ import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/models/category_model.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
 import 'package:ibiza/core/widgets/custom_loader.dart';
-import 'package:ibiza/screens/04_home_screen/models/sites_model.dart';
+
 import 'package:ibiza/screens/10_add_service/provider/service_provider.dart';
 import 'package:ibiza/screens/10_add_service/widgets/service_container.dart';
 import 'package:provider/provider.dart';

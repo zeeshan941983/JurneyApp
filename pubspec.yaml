@@ -34,6 +34,7 @@ dependencies:
   image_picker: ^1.1.2
   geolocator: ^11.1.0
   flutter_custom_clippers: ^2.1.0
+  flutter_svg: ^2.0.10+1
 
 
 dev_dependencies:
@@ -49,6 +50,7 @@ flutter:
   assets:
     - assets/images/
     - assets/json/
+    - assets/svg/
   fonts:
     - family: outfit
       fonts:
