@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
+import 'package:ibiza/screens/10_add_service/provider/service_provider.dart';
+import 'package:ibiza/screens/10_add_service/widgets/common_reservation_container.dart';
+import 'package:provider/provider.dart';
 
 class ConfirmReservation extends StatefulWidget {
   const ConfirmReservation({super.key});
@@ -11,10 +14,11 @@ class ConfirmReservation extends StatefulWidget {
 }
 
 class _ConfirmReservationState extends State<ConfirmReservation> {
+  Color color = Colors.white;
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
+    return Consumer<ServiceProvider>(
+      builder: (context, value, child) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppText(
@@ -31,51 +35,30 @@ class _ConfirmReservationState extends State<ConfirmReservation> {
             fontWeight: FontWeight.w400,
           ),
           10.h.ph,
-          Container(
-            height: 90.h,
-            padding: EdgeInsets.all(8.w),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24.r),
-              border: Border.all(width: 1.w, color: Colors.grey),
-            ),
-            child: Center(
-              child: ListTile(
-                title: Text(
-                  "Use instant book",
-                  style:
-                      TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                ),
-                subtitle: const Text(
-                  "Guests can book automatically.",
-                  style: TextStyle(color: Colors.grey),
-                ),
-                trailing: SvgPicture.asset("assets/svg/light.svg", width: 22.w),
-              ),
-            ),
+          CommonReservationContainer(
+            title: "Use instant book",
+            icon: "assets/svg/light.svg",
+            subtitle: "Guests can book automatically.",
+            color: value.selections.containsKey('reservation') &&
+                    value.selections['reservation']!.reservationNo == 1
+                ? Colors.grey.shade100
+                : Colors.white,
+            onTap: () {
+              value.addReservation(1);
+            },
           ),
           20.h.ph,
-          Container(
-            height: 90.h,
-            padding: EdgeInsets.all(8.w),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24.r),
-              border: Border.all(width: 1.w, color: Colors.grey),
-            ),
-            child: Center(
-              child: ListTile(
-                title: Text(
-                  "Approve or decline requests",
-                  style:
-                      TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                ),
-                subtitle: const Text(
-                  "Guests must ask if they can book.",
-                  style: TextStyle(color: Colors.grey),
-                ),
-                trailing:
-                    SvgPicture.asset("assets/svg/requestMsg.svg", width: 24.w),
-              ),
-            ),
+          CommonReservationContainer(
+            title: "Approve or decline requests",
+            icon: "assets/svg/requestMsg.svg",
+            subtitle: "Guests must ask if they can book.",
+            color: value.selections.containsKey('reservation') &&
+                    value.selections['reservation']!.reservationNo == 2
+                ? Colors.grey.shade100
+                : Colors.white,
+            onTap: () {
+              value.addReservation(2);
+            },
           ),
         ],
       ),

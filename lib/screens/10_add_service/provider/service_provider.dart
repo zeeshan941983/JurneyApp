@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/api/endpoints.dart';
@@ -6,12 +7,13 @@ import 'package:ibiza/core/api/requests.dart';
 import 'package:ibiza/core/models/category_model.dart';
 import 'package:ibiza/core/view_model/base_view_model.dart';
 import 'package:ibiza/screens/04_home_screen/models/sites_model.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ServiceProvider extends BaseViewModel {
   ///Initialize And Get Important Things
   ServiceProvider() {
     getConditions();
-    getServicesOffers();
+    // getServicesOffers();
   }
 
   bool _addService = false;
@@ -47,6 +49,7 @@ class ServiceProvider extends BaseViewModel {
 
   minincrment() {
     if (_minNumberOfPeople < _maxNumberOfPeople) {
+      selectPeople();
       _minNumberOfPeople++;
       minController.text = _minNumberOfPeople.toString();
     }
@@ -65,6 +68,7 @@ class ServiceProvider extends BaseViewModel {
   maxdecrment() {
     if (_maxNumberOfPeople > _minNumberOfPeople) {
       _maxNumberOfPeople--;
+      selectPeople();
       maxController.text = _maxNumberOfPeople.toString();
     }
     notifyListeners();
@@ -72,6 +76,7 @@ class ServiceProvider extends BaseViewModel {
 
   maxincrment() {
     _maxNumberOfPeople++;
+    selectPeople();
     maxController.text = _maxNumberOfPeople.toString();
     notifyListeners();
   }
@@ -110,14 +115,14 @@ class ServiceProvider extends BaseViewModel {
   }
 
   ///Amenties/Services Offers
-  List<Category_Model> _serviceOffers = [];
-  List<Category_Model> get serviceOffers => _serviceOffers;
-  set serviceOffers(List<Category_Model> serOffers) {
+  List<CategoryModel> _serviceOffers = [];
+  List<CategoryModel> get serviceOffers => _serviceOffers;
+  set serviceOffers(List<CategoryModel> serOffers) {
     _serviceOffers = serOffers;
     notifyListeners();
   }
 
-  Future<List<Category_Model>> getServicesOffers() async {
+  Future<List<CategoryModel>> getServicesOffers() async {
     try {
       final response = await APIRequests.makeGetRequest(
           Endpoints.activityCategories, {}, {});
@@ -131,7 +136,7 @@ class ServiceProvider extends BaseViewModel {
       List<Map<String, dynamic>> responseBody =
           response.body.cast<Map<String, dynamic>>();
       serviceOffers = responseBody.map((c) {
-        return Category_Model.fromJson(c);
+        return CategoryModel.fromJson(c);
       }).toList();
 
       // log("here is final data ${serviceOffers.length} ${serviceOffers[0].name}");
@@ -147,4 +152,206 @@ class ServiceProvider extends BaseViewModel {
       return [];
     }
   }
+
+  /////*****************service type add for payment pyout  */
+  final Map<String, dynamic> _selections = {};
+
+  Map<String, dynamic> get selections => _selections;
+
+  void selectOption(
+      String option, String serviceName, String iconofServiceName) {
+    _selections.clear();
+    _selections['serviceData'] = ServiceSelection(
+      serviceName: serviceName,
+      selectedOption: option,
+      iconofServiceName: iconofServiceName,
+    );
+    notifyListeners();
+    log(_selections.length.toString());
+  }
+
+  void deselectOption(int index) {
+    _selections.remove(index);
+    notifyListeners();
+  }
+
+  void addReservation(int reservation) {
+    _selections['reservation'] = ReservationService(reservationNo: reservation);
+    log(_selections.length.toString());
+    notifyListeners();
+  }
+
+  // void selectCondition(
+  //   String condition,
+  //   String geticon,
+  // ) {
+  //   _selections['conditions'] =
+  //       GetConditions(icon: geticon, conditions: condition);
+  //   log(_selections['conditions'].conditions);
+  //   notifyListeners();
+  // }
+  void selectCondition(String condition, String geticon) {
+    if (_selections['conditions'] == null) {
+      _selections['conditions'] = <GetConditions>[];
+    }
+
+    List<GetConditions> conditionsList = _selections['conditions'];
+
+    bool exists = conditionsList.any((c) => c.conditions == condition);
+
+    if (!exists) {
+      conditionsList.add(GetConditions(icon: geticon, conditions: condition));
+    }
+
+    if (conditionsList.length > 2) {
+      conditionsList.removeAt(0);
+    }
+
+    notifyListeners();
+    log(conditionsList.map((c) => c.conditions).join(', '));
+  }
+
+  void deselectCondition(String condition) {
+    List<GetConditions>? conditionsList = _selections['conditions'];
+
+    if (conditionsList != null) {
+      conditionsList.removeWhere((c) => c.conditions == condition);
+      notifyListeners();
+      log(conditionsList.map((c) => c.conditions).join(', '));
+    }
+  }
+
+  void selectPeople() {
+    _selections['people'] = PeopleSelection(
+        minpeople: _minNumberOfPeople, maxpeople: _maxNumberOfPeople);
+    notifyListeners();
+    log(_selections['people'].maxpeople.toString());
+  }
+
+//*******************set price section */
+  bool _isExtraServicesFeeSelected = false;
+  int _radiovalue = 1;
+  String _maxc = "32";
+  final int _count = 0;
+  bool get isextraSerivice => _isExtraServicesFeeSelected;
+  int get radioValue => _radiovalue;
+  String get max => _maxc;
+  int get count => _count;
+  int price = 99;
+  void changeradio(int radio) {
+    _radiovalue = radio;
+
+    notifyListeners();
+  }
+
+  void isextraSerivicechanger(bool value) {
+    _isExtraServicesFeeSelected = value;
+    notifyListeners();
+  }
+
+  void changemax(String value) {
+    _maxc = value;
+    notifyListeners();
+  }
+
+  String _updatePriceType(int value) {
+    switch (value) {
+      case 1:
+        return 'hour';
+
+      case 2:
+        return 'activity';
+
+      case 3:
+        return 'day';
+
+      default:
+        return 'hour';
+    }
+  }
+
+  void selectPriceSection() {
+    _selections['priceSection'] = PriceSection(
+        descriptionLength: 1,
+        maxDescriptionLength: int.parse(_maxc),
+        isExtraServicesFeeSelected: isextraSerivice,
+        basePrice: double.parse(price.toString()),
+        priceType: _updatePriceType(radioValue));
+    notifyListeners();
+    log(_selections['priceSection'].basePrice.toString());
+  }
+
+  final List<File> _images = [];
+  final ImagePicker _picker = ImagePicker();
+  List<File> get images => _images;
+
+  Future<void> pickImages() async {
+    final pickedFiles = await _picker.pickMultiImage(limit: 5);
+
+    if (_images.length + pickedFiles.length <= 5) {
+      for (var pickedFile in pickedFiles) {
+        _images.add(File(pickedFile.path));
+      }
+    } else {
+      print('Cannot select more than 5 images.');
+    }
+    notifyListeners();
+  }
+
+  ///
+}
+
+class ServiceSelection {
+  final String serviceName;
+  final String selectedOption;
+  final String iconofServiceName;
+
+  ServiceSelection({
+    required this.serviceName,
+    required this.selectedOption,
+    required this.iconofServiceName,
+  });
+}
+
+class ReservationService {
+  final int reservationNo;
+
+  ReservationService({
+    required this.reservationNo,
+  });
+}
+
+class GetConditions {
+  final String conditions;
+  final String icon;
+  GetConditions({
+    required this.icon,
+    required this.conditions,
+  });
+}
+
+class PeopleSelection {
+  final int minpeople;
+  final int maxpeople;
+
+  PeopleSelection({
+    required this.maxpeople,
+    required this.minpeople,
+  });
+}
+
+class PriceSection {
+  final String priceType;
+  final double basePrice;
+  bool isExtraServicesFeeSelected;
+  int descriptionLength;
+  int maxDescriptionLength;
+
+  PriceSection({
+    required this.descriptionLength,
+    required this.maxDescriptionLength,
+    required this.isExtraServicesFeeSelected,
+    required this.basePrice,
+    required this.priceType,
+  });
 }

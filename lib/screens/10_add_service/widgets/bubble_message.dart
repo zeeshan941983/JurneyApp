@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:ibiza/core/widgets/bubble_message.dart';
 
 class BubbleMessage extends StatelessWidget {
+  final String? selectedOption;
+  final ValueChanged<String> onOptionSelected;
   final bool istrue;
+
   const BubbleMessage({
     super.key,
+    required this.selectedOption,
+    required this.onOptionSelected,
     required this.istrue,
   });
 
@@ -25,7 +30,6 @@ class BubbleMessage extends StatelessWidget {
             height: 70,
             width: double.infinity,
             child: Row(
-              mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(width: 20),
                 buildOption("Walking"),
@@ -40,6 +44,8 @@ class BubbleMessage extends StatelessWidget {
   }
 
   Widget buildOption(String title) {
+    final isSelected = selectedOption == title;
+
     return Padding(
       padding: const EdgeInsets.only(right: 10.0),
       child: SizedBox(
@@ -50,13 +56,12 @@ class BubbleMessage extends StatelessWidget {
               side: const BorderSide(color: Color(0xffD6D6D6)),
               borderRadius: BorderRadius.circular(10.0),
             ),
-            backgroundColor: Colors.white,
-            // padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            backgroundColor: isSelected ? Colors.grey.shade200 : Colors.white,
           ),
-          onPressed: () {},
+          onPressed: () => onOptionSelected(title),
           child: Text(
             title,
-            style: const TextStyle(color: Color(0xff222222), fontSize: 13),
+            style: const TextStyle(color: Colors.black, fontSize: 13),
           ),
         ),
       ),

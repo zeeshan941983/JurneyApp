@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
-
 import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
+import 'package:ibiza/screens/10_add_service/provider/service_provider.dart';
 import 'package:ibiza/screens/10_add_service/widgets/bubble_message.dart';
 import 'package:ibiza/screens/10_add_service/widgets/service_container.dart';
 import 'package:provider/provider.dart';
@@ -44,8 +44,8 @@ class _ServiceTypeState extends State<ServiceType> {
       case 11:
         return 560.0;
       default:
+        return 100.0;
     }
-    return 100.0;
   }
 
   @override
@@ -60,8 +60,8 @@ class _ServiceTypeState extends State<ServiceType> {
           color: AppColors.col222222,
           fontWeight: FontWeight.w600,
         ),
-        Consumer<HomeProvider>(
-          builder: (context, provider, child) {
+        Consumer2<HomeProvider, ServiceProvider>(
+          builder: (context, provider, serviceOptionsProvider, child) {
             return Expanded(
               child: Stack(
                 children: [
@@ -80,6 +80,13 @@ class _ServiceTypeState extends State<ServiceType> {
                                 onTap: () {
                                   setState(() {
                                     expandedIndex = isExpanded ? null : index;
+
+                                    if (!isExpanded) {
+                                      serviceOptionsProvider.selectOption(
+                                          '',
+                                          provider.categories[index].name,
+                                          provider.categories[index].icon);
+                                    }
                                   });
                                 },
                                 child: ServicesContainer(
@@ -107,7 +114,16 @@ class _ServiceTypeState extends State<ServiceType> {
                                 ? Padding(
                                     padding: EdgeInsets.only(top: data(index)),
                                     child: BubbleMessage(
-                                      istrue: index % 2 == 0 ? true : false,
+                                      istrue: index % 2 == 0,
+                                      selectedOption: serviceOptionsProvider
+                                          .selections['serviceData']
+                                          ?.selectedOption,
+                                      onOptionSelected: (option) {
+                                        serviceOptionsProvider.selectOption(
+                                            option,
+                                            provider.categories[index].name,
+                                            provider.categories[index].icon);
+                                      },
                                     ),
                                   )
                                 : const SizedBox.shrink();

@@ -10,6 +10,7 @@ import 'package:ibiza/screens/10_add_service/views/Calendar_activity_add.dart';
 import 'package:ibiza/screens/10_add_service/views/Create_Discription.dart';
 import 'package:ibiza/screens/10_add_service/views/ServiceTitle.dart';
 import 'package:ibiza/screens/10_add_service/views/confirm_reservation.dart';
+import 'package:ibiza/screens/10_add_service/views/full_preview_page.dart';
 import 'package:ibiza/screens/10_add_service/views/service_address.dart';
 import 'package:ibiza/screens/10_add_service/views/service_condition.dart';
 import 'package:ibiza/screens/10_add_service/views/service_location.dart';
@@ -68,7 +69,9 @@ class _UserDetailsScreenState extends State<AddServiceScreen> {
                           child: PageView(
                             controller: _pageController,
                             physics: const NeverScrollableScrollPhysics(),
-                            onPageChanged: (p) => provider.currentPage = p,
+                            onPageChanged: (p) {
+                              provider.currentPage = p;
+                            },
                             children: const [
                               ServiceType(),
                               ServiceLocation(),
@@ -82,20 +85,22 @@ class _UserDetailsScreenState extends State<AddServiceScreen> {
                               ConfirmReservation(),
                               CalendarActivityAdd(),
                               SetPrice(),
+                              FullPreviewPage(),
                             ],
                           ),
                         ),
                         Align(
                           alignment: Alignment.bottomRight,
                           child: AppButton(
-                            text: 'Next',
-                            width: 98.w,
-                            height: 45.h,
-                            radius: 35.r,
-                            onTap: () => _pageController.nextPage(
-                                duration: Durations.extralong3,
-                                curve: Curves.ease),
-                          ),
+                              text: 'Next',
+                              width: 98.w,
+                              height: 45.h,
+                              radius: 35.r,
+                              onTap: () {
+                                _pageController.nextPage(
+                                    duration: Durations.extralong3,
+                                    curve: Curves.ease);
+                              }),
                         ),
                         15.h.ph,
                       ],

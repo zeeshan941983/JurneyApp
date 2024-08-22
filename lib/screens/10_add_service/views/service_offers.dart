@@ -33,7 +33,7 @@ class ServiceOffers extends StatelessWidget {
           ),
           Consumer<ServiceProvider>(
             builder: (context, provider, child) =>
-                FutureBuilder<List<Category_Model>>(
+                FutureBuilder<List<CategoryModel>>(
               future: provider.getServicesOffers(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting &&
@@ -47,9 +47,14 @@ class ServiceOffers extends StatelessWidget {
                     direction: Axis.horizontal,
                     children: List.generate(
                       services?.length ?? 0,
-                      (index) => ServicesContainer(
-                        icon: services?[index].iconURL ?? AppImages.wind,
-                        title: services?[index].name ?? 'Windy',
+                      (index) => GestureDetector(
+                        onTap: () {
+                          print(index);
+                        },
+                        child: ServicesContainer(
+                          icon: services?[index].iconURL ?? AppImages.wind,
+                          title: services?[index].name ?? 'Windy',
+                        ),
                       ),
                     ),
                   );

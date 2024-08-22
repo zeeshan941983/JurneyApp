@@ -145,7 +145,8 @@ class Activity {
   final Address? address; // Nullable
   final int price;
   final int? extras; // Nullable, to handle cases where extras might be null
-  final String? extraMessage; // Nullable, to handle cases where extra_message might be null
+  final String?
+      extraMessage; // Nullable, to handle cases where extra_message might be null
 
   Activity({
     required this.id,

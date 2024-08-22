@@ -29,10 +29,12 @@ class ServiceCondition extends StatelessWidget {
           fontWeight: FontWeight.w400,
         ),
         Consumer<ServiceProvider>(
-          builder: (context, provider, child) => FutureBuilder<List<Categories>>(
+          builder: (context, provider, child) =>
+              FutureBuilder<List<Categories>>(
             future: provider.getConditions(),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting && provider.serviceCondition.isEmpty) {
+              if (snapshot.connectionState == ConnectionState.waiting &&
+                  provider.serviceCondition.isEmpty) {
                 return const CustomLoader();
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
@@ -42,9 +44,22 @@ class ServiceCondition extends StatelessWidget {
                   direction: Axis.horizontal,
                   children: List.generate(
                     conditions?.length ?? 0,
-                    (index) => ServicesContainer(
-                      icon: conditions?[index].icon ?? AppImages.wind,
-                      title: conditions?[index].name ?? 'Windy',
+                    (index) => GestureDetector(
+                      onTap: () {
+                        provider.selectCondition(
+                            conditions?[index].name ?? 'Windy',
+                            conditions?[index].icon ?? AppImages.wind);
+                      },
+                      child: ServicesContainer(
+                        icon: conditions?[index].icon ?? AppImages.wind,
+                        title: conditions?[index].name ?? 'Windy',
+                        isSelected: provider.selections['conditions']?.any(
+                              (condition) =>
+                                  condition.conditions ==
+                                  conditions?[index].name,
+                            ) ??
+                            false,
+                      ),
                     ),
                   ),
                 );
@@ -54,9 +69,21 @@ class ServiceCondition extends StatelessWidget {
                   direction: Axis.horizontal,
                   children: List.generate(
                     conditions.length,
-                    (index) => ServicesContainer(
-                      icon: conditions[index].icon,
-                      title: conditions[index].name,
+                    (index) => GestureDetector(
+                      onTap: () {
+                        provider.selectCondition(
+                            conditions[index].name, conditions[index].icon);
+                      },
+                      child: ServicesContainer(
+                        icon: conditions[index].icon,
+                        title: conditions[index].name,
+                        isSelected: provider.selections['conditions']?.any(
+                              (condition) =>
+                                  condition.conditions ==
+                                  conditions[index].name,
+                            ) ??
+                            false,
+                      ),
                     ),
                   ),
                 );

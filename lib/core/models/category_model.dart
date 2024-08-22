@@ -1,19 +1,19 @@
-class Category_Model {
+class CategoryModel {
   String id;
   String name;
   List<SubCategory> subCategories;
   List<PriceModel> priceModel;
   String iconURL;
 
-  Category_Model({
+  CategoryModel({
     this.id = '',
     this.name = '',
     this.subCategories = const [],
     this.priceModel = const [],
     this.iconURL = '',
   });
-  factory Category_Model.fromJson(Map<String, dynamic> json) {
-    return Category_Model(
+  factory CategoryModel.fromJson(Map<String, dynamic> json) {
+    return CategoryModel(
       id: json['_id'] ?? '',
       name: json['name'] ?? '',
       subCategories: (json['subCategories'] as List<dynamic>? ?? [])

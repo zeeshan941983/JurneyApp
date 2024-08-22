@@ -50,8 +50,8 @@ class AccountProvider extends BaseViewModel {
 
   Future<File?> pickImage() async {
     try {
-      final ImagePicker _picker = ImagePicker();
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
         await updateAvatar(File(image.path));
       }
@@ -65,10 +65,9 @@ class AccountProvider extends BaseViewModel {
   updateAvatar(File image) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString(USER_TOKEN);
-    var headers = {
-      'Authorization': 'Bearer $token'
-    };
-    var request = http.MultipartRequest('POST', Uri.parse(Endpoints.changeAvatar));
+    var headers = {'Authorization': 'Bearer $token'};
+    var request =
+        http.MultipartRequest('POST', Uri.parse(Endpoints.changeAvatar));
     request.files.add(await http.MultipartFile.fromPath('avatar', image.path));
     request.headers.addAll(headers);
 
@@ -91,11 +90,10 @@ class AccountProvider extends BaseViewModel {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization': 'Bearer $token'
     };
-    final body = {
-      'username': userName
-    };
+    final body = {'username': userName};
 
-    final data = await APIRequests.makePostRequest(Endpoints.changeUser, headers, body);
+    final data =
+        await APIRequests.makePostRequest(Endpoints.changeUser, headers, body);
     setState(ViewState.busy);
   }
 }
