@@ -5,8 +5,10 @@ import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class SpecialRegionsCalendar extends StatefulWidget {
-  const SpecialRegionsCalendar({super.key, required this.homeProvider});
+  const SpecialRegionsCalendar(
+      {super.key, required this.homeProvider, this.showCustomDate = false});
   final HomeProvider homeProvider;
+  final bool showCustomDate;
 
   @override
   State<SpecialRegionsCalendar> createState() => _SpecialRegionsCalendarState();

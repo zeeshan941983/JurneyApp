@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
+import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
+import 'package:ibiza/screens/04_home_screen/sections/section_4.dart';
+import 'package:provider/provider.dart';
 
 class CalendarActivityAdd extends StatefulWidget {
   const CalendarActivityAdd({super.key});
@@ -10,7 +13,7 @@ class CalendarActivityAdd extends StatefulWidget {
 }
 
 class _CalendarActivityAddState extends State<CalendarActivityAdd> {
-  int _radiovalue = 0;
+  int _radiovalue = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +65,16 @@ class _CalendarActivityAddState extends State<CalendarActivityAdd> {
                 color: Colors.grey,
               ),
             ],
-          )
+          ),
+          Consumer<HomeProvider>(
+            builder: (context, homeProvider, child) => SizedBox(
+              child: SizedBox(
+                child: SpecialRegionsCalendar(
+                  homeProvider: homeProvider,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

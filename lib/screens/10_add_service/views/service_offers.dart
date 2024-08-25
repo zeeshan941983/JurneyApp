@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
-import 'package:ibiza/core/models/category_model.dart';
+import 'package:ibiza/core/models/aminities.dart';
+
 import 'package:ibiza/core/widgets/app_text.dart';
 import 'package:ibiza/core/widgets/custom_loader.dart';
 
@@ -32,12 +33,11 @@ class ServiceOffers extends StatelessWidget {
             fontWeight: FontWeight.w400,
           ),
           Consumer<ServiceProvider>(
-            builder: (context, provider, child) =>
-                FutureBuilder<List<CategoryModel>>(
-              future: provider.getServicesOffers(),
+            builder: (context, provider, child) => FutureBuilder<List<Amenity>>(
+              future: provider.getAmenities(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting &&
-                    provider.serviceOffers.isEmpty) {
+                    provider.getAmenitiesinities.isEmpty) {
                   return const CustomLoader();
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
@@ -49,24 +49,43 @@ class ServiceOffers extends StatelessWidget {
                       services?.length ?? 0,
                       (index) => GestureDetector(
                         onTap: () {
-                          print(index);
+                          provider.setguesServiceAmenity(
+                              services?[index].name ?? 'Windy',
+                              services?[index].iconURL ?? AppImages.wind,
+                              services?[index].id ?? "1");
                         },
                         child: ServicesContainer(
                           icon: services?[index].iconURL ?? AppImages.wind,
                           title: services?[index].name ?? 'Windy',
+                          isSelected: provider.selections['Amenity']?.any(
+                                (condition) =>
+                                    condition.name == services?[index].name,
+                              ) ??
+                              false,
                         ),
                       ),
                     ),
                   );
                 } else {
-                  final services = provider.serviceCondition;
+                  final services = provider.getAmenitiesinities;
                   return Wrap(
                     direction: Axis.horizontal,
                     children: List.generate(
                       services.length,
-                      (index) => ServicesContainer(
-                        icon: services[index].icon,
-                        title: services[index].name,
+                      (index) => GestureDetector(
+                        onTap: () {
+                          provider.setguesServiceAmenity(services[index].name,
+                              services[index].iconURL, services[index].id);
+                        },
+                        child: ServicesContainer(
+                          icon: services[index].iconURL,
+                          title: services[index].name,
+                          isSelected: provider.selections['Amenity']?.any(
+                                (condition) =>
+                                    condition.name == services[index].name,
+                              ) ??
+                              false,
+                        ),
                       ),
                     ),
                   );

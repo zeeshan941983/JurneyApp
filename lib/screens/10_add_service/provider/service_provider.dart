@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/api/endpoints.dart';
 import 'package:ibiza/core/api/requests.dart';
+import 'package:ibiza/core/models/aminities.dart';
 import 'package:ibiza/core/models/category_model.dart';
 import 'package:ibiza/core/view_model/base_view_model.dart';
 import 'package:ibiza/screens/04_home_screen/models/sites_model.dart';
@@ -153,6 +154,37 @@ class ServiceProvider extends BaseViewModel {
     }
   }
 
+  ////*********Get aminities****** */
+  List<Amenity> _getAmenities = [];
+  List<Amenity> get getAmenitiesinities => _getAmenities;
+  Future<List<Amenity>> getAmenities() async {
+    try {
+      final response =
+          await APIRequests.makeGetRequest(Endpoints.getserviceOffers, {}, {});
+
+      if (response.error) {
+        log('Error fetching Offers: ${response.message}');
+        await Future.delayed(const Duration(seconds: 2));
+        return [];
+      }
+
+      List<Map<String, dynamic>> responseBody =
+          response.body.cast<Map<String, dynamic>>();
+      _getAmenities = responseBody.map((c) {
+        return Amenity.fromJson(c);
+      }).toList();
+
+      notifyListeners();
+      return _getAmenities;
+    } catch (e) {
+      log('Exception occurred: $e');
+      await Future.delayed(const Duration(seconds: 2));
+      return [];
+    }
+  }
+
+  ///
+
   /////*****************service type add for payment pyout  */
   final Map<String, dynamic> _selections = {};
 
@@ -181,15 +213,27 @@ class ServiceProvider extends BaseViewModel {
     notifyListeners();
   }
 
-  // void selectCondition(
-  //   String condition,
-  //   String geticon,
-  // ) {
-  //   _selections['conditions'] =
-  //       GetConditions(icon: geticon, conditions: condition);
-  //   log(_selections['conditions'].conditions);
-  //   notifyListeners();
-  // }
+  ///save aminties
+  void setguesServiceAmenity(String amentiy, String icon, String id) {
+    if (_selections['Amenity'] == null) {
+      _selections['Amenity'] = <GetAmenity>[];
+    }
+    List<GetAmenity> aminitiesList = _selections['Amenity'];
+    bool exists = aminitiesList.any((c) => c.name == amentiy);
+    if (!exists) {
+      aminitiesList.add(GetAmenity(id: id, name: amentiy, iconURL: icon));
+    }
+
+    if (aminitiesList.length > 2) {
+      aminitiesList.removeAt(0);
+    }
+
+    notifyListeners();
+    log(aminitiesList.map((c) => c.name).join(', '));
+  }
+
+  /////
+  ////save consitions
   void selectCondition(String condition, String geticon) {
     if (_selections['conditions'] == null) {
       _selections['conditions'] = <GetConditions>[];
@@ -211,6 +255,7 @@ class ServiceProvider extends BaseViewModel {
     log(conditionsList.map((c) => c.conditions).join(', '));
   }
 
+////////////////////////////////////////////////////////////////
   void deselectCondition(String condition) {
     List<GetConditions>? conditionsList = _selections['conditions'];
 
@@ -353,5 +398,17 @@ class PriceSection {
     required this.isExtraServicesFeeSelected,
     required this.basePrice,
     required this.priceType,
+  });
+}
+
+class GetAmenity {
+  final String id;
+  final String name;
+  final String iconURL;
+
+  GetAmenity({
+    required this.id,
+    required this.name,
+    required this.iconURL,
   });
 }

@@ -155,6 +155,31 @@ class _FullPreviewPageState extends State<FullPreviewPage> {
                   Row(
                     children: [
                       ServicesContainer(
+                        icon: value.selections['Amenity'][0].iconURL ??
+                            AppImages.wind,
+                        title: value.selections['Amenity'][0].name ?? 'Windy',
+                      ),
+                      ServicesContainer(
+                        icon: value.selections['Amenity'][1].iconURL ??
+                            AppImages.wind,
+                        title: value.selections['Amenity'][1].name ?? 'Windy',
+                      ),
+                    ],
+                  ),
+                  15.h.ph,
+                  const Divider(),
+                  15.h.ph,
+                  const Text(
+                    'Condition',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  8.h.ph,
+                  Row(
+                    children: [
+                      ServicesContainer(
                         icon: value.selections['conditions'][0].icon ??
                             AppImages.wind,
                         title: value.selections['conditions'][0].conditions ??
@@ -170,7 +195,7 @@ class _FullPreviewPageState extends State<FullPreviewPage> {
                   ),
                   8.h.ph,
                   const Divider(),
-                  8.h.ph,
+                  15.h.ph,
                   AppText(
                     text: 'Minmum Number of People',
                     fontSize: 16.sp,

@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
           ),
           initialRoute: '/',
           onGenerateRoute: AppRoutes.generateRoutes,
-          // home: const Testinev(),
+          // home: CalendarScreen(),
         ),
       ),
     );
@@ -71,7 +71,19 @@ class Checkdata extends StatefulWidget {
 class _CheckdataState extends State<Checkdata> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: Consumer<ServiceProvider>(
+        builder: (context, value, child) => Column(
+          children: [
+            ElevatedButton(
+                onPressed: () {
+                  value.getAmenities();
+                },
+                child: Text("data"))
+          ],
+        ),
+      ),
+    );
   }
 }
 
