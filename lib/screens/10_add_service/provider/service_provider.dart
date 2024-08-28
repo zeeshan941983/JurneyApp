@@ -4,11 +4,19 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/api/endpoints.dart';
 import 'package:ibiza/core/api/requests.dart';
+
+import 'package:ibiza/core/constants/storage_keys.dart';
+
 import 'package:ibiza/core/models/aminities.dart';
 import 'package:ibiza/core/models/category_model.dart';
+import 'package:ibiza/core/models/preview_model.dart';
 import 'package:ibiza/core/view_model/base_view_model.dart';
 import 'package:ibiza/screens/04_home_screen/models/sites_model.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'package:http/http.dart' as http;
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ServiceProvider extends BaseViewModel {
   ///Initialize And Get Important Things
@@ -154,6 +162,73 @@ class ServiceProvider extends BaseViewModel {
     }
   }
 
+  final List<File> _images = [];
+  final ImagePicker _picker = ImagePicker();
+  List<File> get images => _images;
+
+  Future<void> pickImages() async {
+    final pickedFiles = await _picker.pickMultiImage(limit: 5);
+
+    if (_images.length + pickedFiles.length <= 5) {
+      for (var pickedFile in pickedFiles) {
+        _images.add(File(pickedFile.path));
+      }
+    } else {
+      print('Cannot select more than 5 images.');
+    }
+    notifyListeners();
+  }
+
+////***********Services**********/////
+  List<dynamic> _services = [];
+  List<dynamic> get services => _services;
+
+  Future<Map<String, dynamic>> setServices() async {
+    try {
+      PreviewService previewData = PreviewService(
+        title: 'Example Title',
+        address:
+            '{"description":"528A Commercial Rd, London E1 0HY, UK","location":{"lat":51.513086693162236,"lng":-0.042528380008144635}}',
+        category: '605c72ef9b1e8f001f8c7f2b',
+        subCategory: '605c72ef9b1e8f001f8c7f2c',
+        images: [for (var image in _images) image],
+        conditions: ['60a79adfd3214e31a4b9c8f8'],
+        description: 'Example description',
+        extraMessage: 'Additional message',
+        availabilities:
+            '[{"dayOfWeek":"Saturday","timeSlots":[{"start":"11:00","end":"12:00"},{"start":"14:00","end":"16:00"}]},{"dayOfWeek":"Tuesday","timeSlots":[{"start":"06:00","end":"08:00"}]}]',
+        pricingModel: '60a79adfd3214e31a4b9c8f8',
+        peopleCanJoin: '2',
+        price: '9999',
+        reservationConfirmation: 'true',
+        amenities: "",
+        extras: '8989',
+      );
+      final prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString(USER_TOKEN);
+      List<http.MultipartFile> imageFiles = await previewData.getImageFiles();
+
+      final response = await APIRequests.makeMultipartPostRequest(
+        Endpoints.services,
+        token,
+        previewData.toFields(),
+        imageFiles,
+      );
+
+      if (response.statusCode == 201) {
+        log('Service created successfully');
+        print(response.body);
+      } else {
+        print('Failed to create service: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+    return {};
+  }
+
+////***********Services End**********/////
   ////*********Get aminities****** */
   List<Amenity> _getAmenities = [];
   List<Amenity> get getAmenitiesinities => _getAmenities;
@@ -324,23 +399,6 @@ class ServiceProvider extends BaseViewModel {
         priceType: _updatePriceType(radioValue));
     notifyListeners();
     log(_selections['priceSection'].basePrice.toString());
-  }
-
-  final List<File> _images = [];
-  final ImagePicker _picker = ImagePicker();
-  List<File> get images => _images;
-
-  Future<void> pickImages() async {
-    final pickedFiles = await _picker.pickMultiImage(limit: 5);
-
-    if (_images.length + pickedFiles.length <= 5) {
-      for (var pickedFile in pickedFiles) {
-        _images.add(File(pickedFile.path));
-      }
-    } else {
-      print('Cannot select more than 5 images.');
-    }
-    notifyListeners();
   }
 
   ///

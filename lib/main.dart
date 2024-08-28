@@ -52,9 +52,9 @@ class MyApp extends StatelessWidget {
                 ColorScheme.fromSeed(seedColor: const Color(0xFF1E99A1)),
             useMaterial3: true,
           ),
-          initialRoute: '/',
-          onGenerateRoute: AppRoutes.generateRoutes,
-          // home: CalendarScreen(),
+          // initialRoute: '/',
+          // onGenerateRoute: AppRoutes.generateRoutes,
+          home: Checkdata(),
         ),
       ),
     );
@@ -72,15 +72,23 @@ class _CheckdataState extends State<Checkdata> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer<ServiceProvider>(
-        builder: (context, value, child) => Column(
-          children: [
-            ElevatedButton(
-                onPressed: () {
-                  value.getAmenities();
-                },
-                child: Text("data"))
-          ],
+      body: Center(
+        child: Consumer<ServiceProvider>(
+          builder: (context, value, child) => Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                  onPressed: () {
+                    value.setServices();
+                  },
+                  child: Text("data")),
+              ElevatedButton(
+                  onPressed: () {
+                    value.pickImages();
+                  },
+                  child: Text("pick"))
+            ],
+          ),
         ),
       ),
     );

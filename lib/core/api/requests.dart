@@ -86,6 +86,86 @@ class APIRequests {
     }
   }
 
+  static Future<ResponseModel> makeMultipartPostRequest(
+    String url,
+    String? token,
+    Map<String, String> fields,
+    List<http.MultipartFile> files,
+  ) async {
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse(url))
+        ..headers.addAll({
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer $token',
+        })
+        ..fields.addAll(fields)
+        ..files.addAll(files);
+
+      http.StreamedResponse streamedResponse = await request.send();
+      http.Response response = await http.Response.fromStream(streamedResponse);
+
+      return ResponseModel(
+        error: response.statusCode != 201,
+        statusCode: response.statusCode,
+        body: jsonDecode(response.body),
+        header: response.headers,
+        message: response.reasonPhrase,
+      );
+    } catch (e) {
+      return ResponseModel(
+        error: true,
+        statusCode: null,
+        body: null,
+        header: null,
+        message: e.toString(),
+      );
+    }
+  }
+  // static Future<ResponseModel> makeMultipartPostRequest(
+  //   String url,
+  //   Map<String, String> headers,
+  //   Map<String, String> fields,
+  //   List<http.MultipartFile> files,
+  // ) async {
+  //   try {
+  //     var request = http.MultipartRequest('POST', Uri.parse(url));
+  //     request.headers.addAll(headers);
+  //     request.fields.addAll(fields);
+  //     // fields.forEach((key, value) {
+  //     //   request.fields[key] = value;
+  //     // });
+
+  //     request.files.addAll(files);
+
+  //     final streamedResponse = await request.send();
+  //     final response = await http.Response.fromStream(streamedResponse);
+  //     log(response.body);
+
+  //     if (response.statusCode == 200 || response.statusCode == 201) {
+  //       log("sucess");
+  //       return ResponseModel(
+  //         error: false,
+  //         statusCode: response.statusCode,
+  //         body: json.decode(response.body),
+  //       );
+  //     } else {
+  //       return ResponseModel(
+  //         error: true,
+  //         statusCode: response.statusCode,
+  //         body: json.decode(response.body),
+  //         message: 'Failed to load data: ${response.reasonPhrase}',
+  //       );
+  //     }
+  //   } catch (e) {
+  //     return ResponseModel(
+  //       error: true,
+  //       statusCode: null,
+  //       body: null,
+  //       message: e.toString(),
+  //     );
+  //   }
+  // }
+
   static Future<ResponseModel> makeGetRequest(
     String url,
     Map<String, String> headers,

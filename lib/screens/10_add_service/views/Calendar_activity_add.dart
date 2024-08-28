@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
 import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
-import 'package:ibiza/screens/04_home_screen/sections/section_4.dart';
+
+import 'package:ibiza/screens/10_add_service/widgets/calendar.dart';
 import 'package:provider/provider.dart';
 
 class CalendarActivityAdd extends StatefulWidget {
@@ -69,7 +70,7 @@ class _CalendarActivityAddState extends State<CalendarActivityAdd> {
           Consumer<HomeProvider>(
             builder: (context, homeProvider, child) => SizedBox(
               child: SizedBox(
-                child: SpecialRegionsCalendar(
+                child: SelectActivityCalendar(
                   homeProvider: homeProvider,
                 ),
               ),
