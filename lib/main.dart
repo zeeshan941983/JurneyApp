@@ -52,9 +52,9 @@ class MyApp extends StatelessWidget {
                 ColorScheme.fromSeed(seedColor: const Color(0xFF1E99A1)),
             useMaterial3: true,
           ),
-          // initialRoute: '/',
-          // onGenerateRoute: AppRoutes.generateRoutes,
-          home: Checkdata(),
+          initialRoute: '/',
+          onGenerateRoute: AppRoutes.generateRoutes,
+          // home: Checkdata(),
         ),
       ),
     );

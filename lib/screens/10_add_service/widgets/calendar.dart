@@ -17,12 +17,12 @@ class SelectActivityCalendar extends StatefulWidget {
 
 class _SpecialRegionsCalendarState extends State<SelectActivityCalendar> {
   final CalendarController calendarController = CalendarController();
-  final List<CalendarView> _allowedViews = <CalendarView>[
-    CalendarView.day,
-    CalendarView.week,
-    // CalendarView.workWeek,
-    // CalendarView.timelineDay,
-  ];
+  // final List<CalendarView> _allowedViews = <CalendarView>[
+  //   CalendarView.day,
+  //   CalendarView.week,
+  //   // CalendarView.workWeek,
+  //   // CalendarView.timelineDay,
+  // ];
 
   List<TimeRegion> regions = <TimeRegion>[];
   List<int> selectedDays = [];
