@@ -10,10 +10,9 @@ class Section2 extends StatelessWidget {
   Section2({
     super.key,
   });
-  
+
   final ScrollController _scrollController = ScrollController();
   @override
-
   Widget build(BuildContext context) {
     final provider = Provider.of<HomeProvider>(context, listen: false);
     return Container(
@@ -42,28 +41,32 @@ class Section2 extends StatelessWidget {
             ],
           ).withPadding(),
           SizedBox(
-                height: 307.h,
-                child: ListView.builder(
-                    controller: _scrollController,
-                    itemCount: provider.popularServiceModel.documents.length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      final popularSerivce = provider.popularServiceModel.documents[index];
-                      return InkWell(
-                        onTap: () => context.pushName(AppRoutes.detailsScreen),
-                        child: ListCard(
-                          image: popularSerivce.images.first,
-                          place: popularSerivce.title,
-                          price: popularSerivce.price.toDouble(),
-                          distance: provider.distanceBetween[index],
-                          date: DateTime.now(),
-                          isDarkBG: false,
-                        ).withPadding(),
-                      );
-                    }),
-              ),
-              Row(
+            height: 307.h,
+            child: ListView.builder(
+                controller: _scrollController,
+                itemCount: provider.popularServiceModel.documents.length,
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  final popularSerivce =
+                      provider.popularServiceModel.documents[index];
+                  String imageUrl = popularSerivce.images.isNotEmpty
+                      ? popularSerivce.images.first
+                      : 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png';
+                  return InkWell(
+                    onTap: () => context.pushName(AppRoutes.detailsScreen),
+                    child: ListCard(
+                      image: imageUrl,
+                      place: popularSerivce.title,
+                      price: popularSerivce.price.toDouble(),
+                      distance: provider.distanceBetween[index],
+                      date: DateTime.now(),
+                      isDarkBG: false,
+                    ).withPadding(),
+                  );
+                }),
+          ),
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               AppText(
@@ -84,29 +87,33 @@ class Section2 extends StatelessWidget {
               )
             ],
           ).withPadding(),
-           SizedBox(
-                height: 307.h,
-                child: ListView.builder(
-                    controller: _scrollController,
-                    itemCount: provider.popularServiceModel.documents.length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      final popularSerivce = provider.popularServiceModel.documents[index];
-                      return InkWell(
-                        onTap: () => context.pushName(AppRoutes.detailsScreen),
-                        child: ListCard(
-                          image: popularSerivce.images.first,
-                          place: popularSerivce.title,
-                          price: popularSerivce.price.toDouble(),
-                          distance: provider.distanceBetween[index],
-                          date: DateTime.now(),
-                          isDarkBG: false,
-                        ).withPadding(),
-                      );
-                    }),
-              ),
-            20.h.ph,
+          SizedBox(
+            height: 307.h,
+            child: ListView.builder(
+                controller: _scrollController,
+                itemCount: provider.popularServiceModel.documents.length,
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  final popularSerivce =
+                      provider.popularServiceModel.documents[index];
+                  String imageUrl = popularSerivce.images.isNotEmpty
+                      ? popularSerivce.images.first
+                      : 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png';
+                  return InkWell(
+                    onTap: () => context.pushName(AppRoutes.detailsScreen),
+                    child: ListCard(
+                      image: imageUrl,
+                      place: popularSerivce.title,
+                      price: popularSerivce.price.toDouble(),
+                      distance: provider.distanceBetween[index],
+                      date: DateTime.now(),
+                      isDarkBG: false,
+                    ).withPadding(),
+                  );
+                }),
+          ),
+          20.h.ph,
         ],
       ),
     );

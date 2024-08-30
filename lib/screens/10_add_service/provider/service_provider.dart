@@ -22,7 +22,7 @@ class ServiceProvider extends BaseViewModel {
   ///Initialize And Get Important Things
   ServiceProvider() {
     getConditions();
-    // getServicesOffers();
+    getServicesOffers();
   }
 
   bool _addService = false;

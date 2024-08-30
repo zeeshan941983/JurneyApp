@@ -73,18 +73,19 @@ class _CheckdataState extends State<Checkdata> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Consumer<ServiceProvider>(
+        child: Consumer<HomeProvider>(
           builder: (context, value, child) => Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
                   onPressed: () {
-                    value.setServices();
+                    value.getPopularService();
+                    print(value.popularServiceModel.documents);
                   },
                   child: Text("data")),
               ElevatedButton(
                   onPressed: () {
-                    value.pickImages();
+                    // value.pickImages();
                   },
                   child: Text("pick"))
             ],

@@ -17,15 +17,15 @@ class ListCard extends StatelessWidget {
 
   final String image, place;
   final double price;
-  final double? distance; // Handle nullable distance
+  final double? distance;
   final DateTime date;
   final bool isDarkBG;
 
   @override
   Widget build(BuildContext context) {
+    print(image);
     return SizedBox(
       width: 158.w,
-      // height: 261.h,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -37,6 +37,7 @@ class ListCard extends StatelessWidget {
               image: DecorationImage(
                 image: NetworkImage(image),
                 fit: BoxFit.cover,
+                onError: (error, stackTrace) {},
               ),
             ),
           ),
@@ -49,15 +50,15 @@ class ListCard extends StatelessWidget {
           ),
           3.h.ph,
           AppText(
-            text: '${distance ?? 'Unknown'} Kilometer away', // Handle nullable distance
-            color: isDarkBG ?  AppColors.colCECECE : AppColors.col7A7A7A,
+            text: '${distance ?? 'Unknown'} Kilometer away',
+            color: isDarkBG ? AppColors.colCECECE : AppColors.col7A7A7A,
             fontSize: 14.sp,
             fontWeight: FontWeight.w400,
           ),
           3.h.ph,
           AppText(
-            text: DateFormat('MMMM dd, yyyy').format(date), // Corrected date format
-            color: isDarkBG ?  AppColors.colCECECE : AppColors.col7A7A7A,
+            text: DateFormat('MMMM dd, yyyy').format(date),
+            color: isDarkBG ? AppColors.colCECECE : AppColors.col7A7A7A,
             fontSize: 14.sp,
             fontWeight: FontWeight.w400,
           ),
@@ -74,7 +75,7 @@ class ListCard extends StatelessWidget {
                 TextSpan(
                   text: ' night',
                   style: TextStyle(
-                    color: isDarkBG ?  AppColors.colCECECE : AppColors.col7A7A7A,
+                    color: isDarkBG ? AppColors.colCECECE : AppColors.col7A7A7A,
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w400,
                   ),

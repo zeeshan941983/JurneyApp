@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/constants/enums.dart';
+
 import 'package:ibiza/core/routes/app_router.dart';
 import 'package:ibiza/core/widgets/app_button.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
@@ -8,6 +10,7 @@ import 'package:ibiza/core/widgets/app_text.dart';
 import 'package:ibiza/core/widgets/custom_loader.dart';
 import 'package:ibiza/core/widgets/list_card.dart';
 import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
+
 import 'package:provider/provider.dart';
 
 class Section1 extends StatefulWidget {
@@ -30,6 +33,7 @@ class _Section1State extends State<Section1> with TickerProviderStateMixin {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = Provider.of<HomeProvider>(context, listen: false);
       await provider.getCategories();
+
       setState(() {
         _tabcontroller = TabController(
           length:
@@ -214,28 +218,38 @@ class _Section1State extends State<Section1> with TickerProviderStateMixin {
               16.h.ph,
               SizedBox(
                 height: 307.h,
-                child: ListView.builder(
-                    controller: _scrollController,
-                    itemCount: provider.popularServiceModel.documents.length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      final popularSerivce =
-                          provider.popularServiceModel.documents[index];
+                child: provider.popularServiceModel.documents.isNotEmpty
+                    ? ListView.builder(
+                        controller: _scrollController,
+                        itemCount:
+                            provider.popularServiceModel.documents.length,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          final popularService =
+                              provider.popularServiceModel.documents[index];
 
-                      return InkWell(
-                        onTap: () => context.pushName(AppRoutes.detailsScreen),
-                        child: ListCard(
-                          image: popularSerivce.images.first,
-                          place: popularSerivce.title,
-                          price: popularSerivce.price.toDouble(),
-                          distance: provider.distanceBetween[index],
-                          date: DateTime.now(),
-                          isDarkBG: true,
-                        ).withPadding(),
-                      );
-                    }),
+                          String imageUrl = popularService.images.isNotEmpty
+                              ? popularService.images.first
+                              : 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png';
+
+                          return InkWell(
+                            onTap: () => provider.getPopularService(),
+                            child: ListCard(
+                              image: imageUrl,
+                              place: popularService.title,
+                              price: popularService.price.toDouble(),
+                              distance: 200.0,
+                              date: DateTime.now(),
+                              isDarkBG: true,
+                            ).withPadding(),
+                          );
+                        },
+                      )
+                    : const Center(
+                        child: Text("No popular services available")),
               ),
+
               20.h.ph,
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,

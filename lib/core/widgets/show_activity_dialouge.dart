@@ -1,6 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
-import 'package:ibiza/core/models/most_popular_post.dart';
 
 import 'package:ibiza/core/widgets/app_button.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
@@ -77,18 +78,20 @@ showActivityDialouge(BuildContext context) {
                             itemBuilder: (context, index) {
                               final popularSerivce =
                                   provider.filteredDocuments[index];
+                              String url = popularSerivce.images.isNotEmpty
+                                  ? popularSerivce.images.first
+                                  : 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png';
 
                               return ActivityContainer(
-                                data: popularSerivce,
-                                image: popularSerivce.images.first,
+                                image: url,
                                 place: popularSerivce.title,
                                 price: popularSerivce.price.toDouble(),
-                                distance: provider.distanceBetween[index],
+                                distance: 887.0,
                                 date: DateTime.now(),
                                 onTap: () {
                                   provider.addpopular(popularSerivce);
                                   Navigator.pop(context);
-                                  provider.clearcontroller();
+                                  // provider.clearcontroller();
                                 },
                               );
                             }),
@@ -106,7 +109,7 @@ showActivityDialouge(BuildContext context) {
 class ActivityContainer extends StatelessWidget {
   const ActivityContainer({
     super.key,
-    required this.data,
+    // required this.data,
     required this.onTap,
     required this.image,
     required this.place,
@@ -115,7 +118,7 @@ class ActivityContainer extends StatelessWidget {
     required this.date,
   });
 
-  final DocumentModel data;
+  // final DocumentModel data;
   final String image;
   final String place;
   final double price;
@@ -141,7 +144,7 @@ class ActivityContainer extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(15.42.r),
             child: Image.network(
-              data.images.first,
+              image,
               height: 80.h,
               width: 85.w,
               fit: BoxFit.cover,
@@ -209,7 +212,7 @@ class ActivityContainer extends StatelessWidget {
                 SizedBox(
                   width: 70.w,
                   child: AppText(
-                    text: '\$${data.price}/hour',
+                    text: '\$$price/hour',
                     color: AppColors.col1D1D1D,
                     fontSize: 12.sp,
                     textAlign: TextAlign.right,

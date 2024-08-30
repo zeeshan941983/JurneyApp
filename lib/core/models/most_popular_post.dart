@@ -1,4 +1,3 @@
-
 class PopularModel {
   final int totalPages;
   final int currentPage;
@@ -60,6 +59,11 @@ class DocumentModel {
   });
 
   factory DocumentModel.fromJson(Map<String, dynamic> json) {
+    List<String> imageUrls = (json['images'] as List)
+        .map((item) => item as String)
+        .toSet() // Remove duplicates
+        .toList();
+
     return DocumentModel(
       id: json['_id'] ?? '',
       title: json['title'] ?? '',
@@ -67,8 +71,10 @@ class DocumentModel {
       price: json['price'] ?? 0,
       user: json['user'] ?? '',
       slug: json['slug'] ?? '',
-      distance: json['distance'] != null ? (json['distance'] as num).toDouble() : null,
-      images: (json['images'] as List).map((item) => item as String).toList(),
+      distance: json['distance'] != null
+          ? (json['distance'] as num).toDouble()
+          : null,
+      images: imageUrls,
     );
   }
 
@@ -88,5 +94,80 @@ class DocumentModel {
   @override
   String toString() {
     return 'DocumentModel(id: $id, title: $title, address: $address, price: $price, user: $user, slug: $slug, distance: $distance, images: $images)';
+  }
+}
+
+class AddressModel {
+  final String description;
+  final LocationModel location;
+
+  AddressModel({
+    required this.description,
+    required this.location,
+  });
+
+  factory AddressModel.fromJson(Map<String, dynamic> json) {
+    return AddressModel(
+      description: json['description'] ?? '',
+      location: LocationModel.fromJson(json['location']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'description': description,
+      'location': location.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    return 'AddressModel(description: $description, location: $location)';
+  }
+}
+
+class LocationModel {
+  final double lat;
+  final double lng;
+
+  LocationModel({
+    required this.lat,
+    required this.lng,
+  });
+
+  factory LocationModel.fromJson(Map<String, dynamic> json) {
+    return LocationModel(
+      lat: json['lat']?.toDouble() ?? 0.0,
+      lng: json['lng']?.toDouble() ?? 0.0,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'lat': lat,
+      'lng': lng,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'LocationModel(lat: $lat, lng: $lng)';
+  }
+}
+
+class PriceModel {
+  PriceModel();
+
+  factory PriceModel.fromJson(Map<String, dynamic> json) {
+    return PriceModel();
+  }
+
+  Map<String, dynamic> toJson() {
+    return {};
+  }
+
+  @override
+  String toString() {
+    return 'PriceModel()';
   }
 }

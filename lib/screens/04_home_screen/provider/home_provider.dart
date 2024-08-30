@@ -138,36 +138,37 @@ class HomeProvider extends BaseViewModel {
   //   }
   // }
 
-   getCalenders() async {
-     final prefs = await SharedPreferences.getInstance();
-     String? token = prefs.getString(USER_TOKEN);
-     var header = {
+  getCalenders() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(USER_TOKEN);
+    var header = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
     };
-     final response = await APIRequests.makeGetRequest(
-        Endpoints.getCalender,
-        header,
-        {},
-      );
+    final response = await APIRequests.makeGetRequest(
+      Endpoints.getCalender,
+      header,
+      {},
+    );
 
-      if (response.error) {
+    if (response.error) {
       Fluttertoast.showToast(msg: response.message.toString());
       return;
     }
 
-        print('Success: ${response.body}');
-        print('get calender APi message: ${response.message}');
-      final data = response.body['data'];
-      if (data != null) {
-        _listOfUserAppointments.clear();
-        final calenders = CalenderModel.fromJson(convertStringToJson(data));
-        _listOfUserAppointments = getAppointments(calenders);
-        log(_listOfUserAppointments.length.toString());
-        setUserAppointments();
-        notifyListeners();
-      }
-   }
+    print('Success: ${response.body}');
+    print('get calender APi message: ${response.message}');
+    final data = response.body['data'];
+    if (data != null) {
+      _listOfUserAppointments.clear();
+      final calenders = CalenderModel.fromJson(convertStringToJson(data));
+      _listOfUserAppointments = getAppointments(calenders);
+      log(_listOfUserAppointments.length.toString());
+      setUserAppointments();
+      notifyListeners();
+    }
+  }
+
   List<Appointment> getAppointments(CalenderModel calendar) {
     List<Appointment> appointment = [];
     for (var week in calendar.weeks) {
@@ -293,6 +294,51 @@ class HomeProvider extends BaseViewModel {
   }
 
   ///GET POPULAR SERVICE
+  // late PopularModel _popularServiceModel;
+  // PopularModel get popularServiceModel => _popularServiceModel;
+  // final List<double> _distanceBetween = [];
+  // List<double> get distanceBetween => _distanceBetween;
+
+  // getPopularService() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   String? token = prefs.getString(USER_TOKEN);
+  //   log("TOKEN $token");
+  //   final popularService = await APIRequests.makeGetRequest(
+  //     Endpoints.popularService,
+  //     {
+  //       'Content-Type': 'application/x-www-form-urlencoded',
+  //       'Authorization': 'Bearer $token',
+  //     },
+  //     {},
+  //   );
+  //   setState(ViewState.idle);
+  //   log('--------------1-------------');
+  //   log('popularService: ${popularService.body}');
+  //   log('--------------2.1-------------');
+  //   final Map<String, dynamic> jsonData = jsonDecode(popularService.body);
+  //   _popularServiceModel = PopularModel.fromJson(jsonData);
+  //   List<double> latList = [];
+  //   List<double> lngList = [];
+  //   log("before loop");
+  //   for (int i = 0; i < popularServiceModel.documents.length; i++) {
+  //     log("inside loop");
+  //     Map<String, dynamic> addressMap =
+  //         jsonDecode(popularServiceModel.documents[i].address);
+  //     double lat = double.parse(addressMap['lat'].toString());
+  //     double lng = double.parse(addressMap['lng'].toString());
+  //     lngList.add(lng);
+  //     latList.add(lat);
+  //     final distance = Geolocator.distanceBetween(
+  //         33.98052, 71.54901, latList[i], lngList[i]);
+  //     double lastvalue = distance / 1000;
+  //     _distanceBetween.add(double.parse(lastvalue.toStringAsFixed(2)));
+  //     print('Distance to point $i: ${distance / 1000} km');
+  //     print('Distance to point $i: ${distanceBetween.length} km');
+  //   }
+  //   log('--------------3-------------');
+  //   log("DoucmentData ${popularServiceModel.documents}");
+  //   log('--------------4-------------');
+  // }
   late PopularModel _popularServiceModel;
   PopularModel get popularServiceModel => _popularServiceModel;
   final List<double> _distanceBetween = [];
@@ -302,6 +348,7 @@ class HomeProvider extends BaseViewModel {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(USER_TOKEN);
     log("TOKEN $token");
+
     final popularService = await APIRequests.makeGetRequest(
       Endpoints.popularService,
       {
@@ -310,32 +357,36 @@ class HomeProvider extends BaseViewModel {
       },
       {},
     );
+
     setState(ViewState.idle);
     log('--------------1-------------');
     log('popularService: ${popularService.body}');
     log('--------------2.1-------------');
+
     final Map<String, dynamic> jsonData = jsonDecode(popularService.body);
     _popularServiceModel = PopularModel.fromJson(jsonData);
-    List<double> latList = [];
-    List<double> lngList = [];
+
     log("before loop");
+
     for (int i = 0; i < popularServiceModel.documents.length; i++) {
       log("inside loop");
+
+      // Parsing the address field as JSON to extract the description and location
       Map<String, dynamic> addressMap =
           jsonDecode(popularServiceModel.documents[i].address);
-      double lat = double.parse(addressMap['lat'].toString());
-      double lng = double.parse(addressMap['lng'].toString());
-      lngList.add(lng);
-      latList.add(lat);
-      final distance = Geolocator.distanceBetween(
-          33.98052, 71.54901, latList[i], lngList[i]);
-      double lastvalue = distance / 1000;
-      _distanceBetween.add(double.parse(lastvalue.toStringAsFixed(2)));
-      print('Distance to point $i: ${distance / 1000} km');
-      print('Distance to point $i: ${distanceBetween.length} km');
+      double lat = addressMap['location']['lat'];
+      double lng = addressMap['location']['lng'];
+
+      // Calculating the distance
+      final distance = Geolocator.distanceBetween(33.98052, 71.54901, lat, lng);
+      double lastValue = distance / 1000;
+      _distanceBetween.add(double.parse(lastValue.toStringAsFixed(2)));
+
+      // print('Distance to point $i: ${lastValue} km');
     }
+
     log('--------------3-------------');
-    log("DoucmentData ${popularServiceModel.documents}");
+    log("DocumentData: ${popularServiceModel.documents}");
     log('--------------4-------------');
   }
 
