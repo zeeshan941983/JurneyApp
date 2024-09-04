@@ -234,7 +234,9 @@ class _Section1State extends State<Section1> with TickerProviderStateMixin {
                               : 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png';
 
                           return InkWell(
-                            onTap: () => provider.getPopularService(),
+                            onTap: () => context.pushName(
+                                AppRoutes.detailsScreen,
+                                arguments: popularService),
                             child: ListCard(
                               image: imageUrl,
                               place: popularService.title,

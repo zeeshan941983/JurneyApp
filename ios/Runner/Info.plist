@@ -49,6 +49,8 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
     <key>NSAppTransportSecurity</key>
+	<key>NSLocationWhenInUseUsageDescription</key>
+<string>This app needs access to location when open.</string>
 <dict>
     <key>NSAllowsArbitraryLoads</key><true/>
 </dict>

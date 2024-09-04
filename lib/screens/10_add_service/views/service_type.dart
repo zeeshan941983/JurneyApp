@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
@@ -70,7 +72,7 @@ class _ServiceTypeState extends State<ServiceType> {
                     child: Wrap(
                       direction: Axis.horizontal,
                       children: List.generate(
-                        provider.categories.length,
+                        serviceOptionsProvider.serviceOffers.length,
                         (index) {
                           final isExpanded = expandedIndex == index;
                           return Column(
@@ -80,12 +82,19 @@ class _ServiceTypeState extends State<ServiceType> {
                                 onTap: () {
                                   setState(() {
                                     expandedIndex = isExpanded ? null : index;
-
+                                    log(serviceOptionsProvider
+                                        .serviceOffers[index].priceModel[0].id);
                                     if (!isExpanded) {
                                       serviceOptionsProvider.selectOption(
                                           '',
-                                          provider.categories[index].name,
-                                          provider.categories[index].icon);
+                                          serviceOptionsProvider
+                                              .serviceOffers[index].name,
+                                          serviceOptionsProvider
+                                              .serviceOffers[index].iconURL,
+                                          serviceOptionsProvider
+                                              .serviceOffers[index]
+                                              .priceModel[0]
+                                              .id);
                                     }
                                   });
                                 },
@@ -106,7 +115,7 @@ class _ServiceTypeState extends State<ServiceType> {
                       alignment: Alignment.topLeft,
                       child: Column(
                         children: List.generate(
-                          provider.categories.length,
+                          serviceOptionsProvider.serviceOffers.length,
                           (index) {
                             final isExpanded = expandedIndex == index;
 
@@ -114,6 +123,8 @@ class _ServiceTypeState extends State<ServiceType> {
                                 ? Padding(
                                     padding: EdgeInsets.only(top: data(index)),
                                     child: BubbleMessage(
+                                      subCategories: serviceOptionsProvider
+                                          .serviceOffers[index].subCategories,
                                       istrue: index % 2 == 0,
                                       selectedOption: serviceOptionsProvider
                                           .selections['serviceData']
@@ -121,8 +132,14 @@ class _ServiceTypeState extends State<ServiceType> {
                                       onOptionSelected: (option) {
                                         serviceOptionsProvider.selectOption(
                                             option,
-                                            provider.categories[index].name,
-                                            provider.categories[index].icon);
+                                            serviceOptionsProvider
+                                                .serviceOffers[index].name,
+                                            serviceOptionsProvider
+                                                .serviceOffers[index].iconURL,
+                                            serviceOptionsProvider
+                                                .serviceOffers[index]
+                                                .priceModel[0]
+                                                .id);
                                       },
                                     ),
                                   )

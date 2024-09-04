@@ -1,9 +1,11 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:ibiza/core/widgets/app_button.dart';
-import 'package:ibiza/screens/05_details_screen/sections/details_section5.dart';
 import 'package:provider/provider.dart';
+
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/constants/enums.dart';
+import 'package:ibiza/core/models/most_popular_post.dart';
+import 'package:ibiza/core/widgets/app_button.dart';
 import 'package:ibiza/core/widgets/app_text_field.dart';
 import 'package:ibiza/core/widgets/custom_loader.dart';
 import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
@@ -11,11 +13,16 @@ import 'package:ibiza/screens/05_details_screen/sections/details_section1.dart';
 import 'package:ibiza/screens/05_details_screen/sections/details_section2.dart';
 import 'package:ibiza/screens/05_details_screen/sections/details_section3.dart';
 import 'package:ibiza/screens/05_details_screen/sections/details_section4.dart';
+import 'package:ibiza/screens/05_details_screen/sections/details_section5.dart';
 
 import '../../core/routes/app_router.dart';
 
 class DetailsScreen extends StatefulWidget {
-  const DetailsScreen({super.key});
+  final DocumentModel popularSerivce;
+  const DetailsScreen({
+    super.key,
+    required this.popularSerivce,
+  });
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
@@ -52,7 +59,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   50.h.ph,
-                  const DetailsSection1(),
+                  DetailsSection1(
+                    images: widget.popularSerivce.images,
+                  ),
                   10.h.ph,
                   customDivier.withPadding(),
                   const DetailsSection2(),

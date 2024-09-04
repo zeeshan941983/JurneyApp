@@ -4,15 +4,21 @@ import 'package:ibiza/core/constants/constants.dart';
 class DiscriptionTextfield extends StatelessWidget {
   final int max;
   final String? hintText;
+  final TextEditingController controller;
 
   final Function(String)? onChanged;
 
   const DiscriptionTextfield(
-      {super.key, required this.max, this.onChanged, this.hintText});
+      {super.key,
+      required this.max,
+      this.onChanged,
+      this.hintText,
+      required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       onChanged: (value) {
         // setState(() {
         //   count = value.length;
@@ -29,7 +35,7 @@ class DiscriptionTextfield extends StatelessWidget {
         counterText: "",
       ),
       style: TextStyle(fontSize: 16.sp),
-      keyboardType: TextInputType.multiline,
+      keyboardType: TextInputType.name,
     );
   }
 }

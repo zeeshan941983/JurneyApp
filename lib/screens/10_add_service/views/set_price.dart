@@ -162,6 +162,7 @@ class _SetPriceState extends State<SetPrice> {
                 border: Border.all(width: 1.w, color: Colors.grey),
               ),
               child: DiscriptionTextfield(
+                controller: provider.priceController,
                 max: int.parse(provider.max),
                 hintText:
                     "If you want to avail this service you might need to pay some extra",

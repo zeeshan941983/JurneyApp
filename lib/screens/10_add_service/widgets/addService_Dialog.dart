@@ -1,16 +1,19 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
+
 import 'package:ibiza/core/constants/constants.dart';
-import 'package:ibiza/core/models/add_activity_model.dart';
+
 import 'package:ibiza/core/widgets/app_button.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
-import 'package:ibiza/core/widgets/show_activity_dialouge.dart';
+// import 'package:ibiza/core/widgets/show_activity_dialouge.dart';
 import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
+import 'package:ibiza/screens/10_add_service/models/avalibilities.dart';
+import 'package:ibiza/screens/10_add_service/provider/service_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-void showAddAppointmentDialog(
+void showAddAppointmentServicesDialog(
   DateTime selectedDate,
   BuildContext context,
 ) {
@@ -22,9 +25,9 @@ void showAddAppointmentDialog(
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return Consumer<HomeProvider>(
-        builder: (context, provider, child) => AlertDialog(
-          titlePadding: EdgeInsets.only(left: 10.w, top: 10.h),
+      return Consumer2<HomeProvider, ServiceProvider>(
+        builder: (context, provider, service, child) => AlertDialog(
+          titlePadding: EdgeInsets.only(left: 10.w, top: 20.h, right: 10.w),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -55,37 +58,37 @@ void showAddAppointmentDialog(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    height: 33.h,
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 10.w),
-                    decoration: BoxDecoration(
-                      color: AppColors.colF4F4F4,
-                      borderRadius: BorderRadius.circular(35.r),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: AppText(
-                            text: provider.populardata?.title ?? '',
-                            color: AppColors.col7A7A7A,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w500,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        10.w.ph,
-                        AppText(
-                          text: '\$${provider.populardata?.price ?? 0}/hour',
-                          color: AppColors.col7A7A7A,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
-                          overflow: TextOverflow.ellipsis,
-                        )
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   height: 33.h,
+                  //   width: double.infinity,
+                  //   padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  //   decoration: BoxDecoration(
+                  //     color: AppColors.colF4F4F4,
+                  //     borderRadius: BorderRadius.circular(35.r),
+                  //   ),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Expanded(
+                  //         child: AppText(
+                  //           text: provider.populardata?.title ?? '',
+                  //           color: AppColors.col7A7A7A,
+                  //           fontSize: 14.sp,
+                  //           fontWeight: FontWeight.w500,
+                  //           overflow: TextOverflow.ellipsis,
+                  //         ),
+                  //       ),
+                  //       10.w.ph,
+                  //       // AppText(
+                  //       //   text: '\$${provider.populardata?.price ?? 0}/hour',
+                  //       //   color: AppColors.col7A7A7A,
+                  //       //   fontSize: 14.sp,
+                  //       //   fontWeight: FontWeight.w500,
+                  //       //   overflow: TextOverflow.ellipsis,
+                  //       // )
+                  //     ],
+                  //   ),
+                  // ),
                   ExpansionTile(
                     backgroundColor: AppColors.colF4F4F4,
                     iconColor: AppColors.col1E99A1,
@@ -124,22 +127,21 @@ void showAddAppointmentDialog(
                                 ),
                               );
                             },
-                            childCount:
-                                24 * 2 - 1, // 24 hours, half-hour increments
+                            childCount: 24 * 2 - 1,
                           ),
                         ),
                       )
                     ],
                   ),
                   15.h.ph,
-                  AppButton(
-                    height: 40.h,
-                    radius: 35.r,
-                    textSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                    text: 'Add Activity',
-                    onTap: () => showActivityDialouge(context),
-                  ),
+                  // AppButton(
+                  //   height: 40.h,
+                  //   radius: 35.r,
+                  //   textSize: 16.sp,
+                  //   fontWeight: FontWeight.w500,
+                  //   text: 'Add Activity',
+                  //   onTap: () => showActivityDialouge(context),
+                  // ),
                 ],
               ),
             ),
@@ -153,47 +155,53 @@ void showAddAppointmentDialog(
               fontWeight: FontWeight.w500,
               text: 'Save',
               onTap: () {
-                String week = provider.getStartOfWeek(selectedDate);
-                String selecteddate = provider.setdateformate(selectedDate);
+                // String week = provider.getStartOfWeek(selectedDate);
+                // String selecteddate = provider.setdateformate(selectedDate);
                 String weekofday = provider.setDaysFromDate(selectedDate);
                 String starttime = provider.setTimeForm(selectedDate);
                 String endTime = provider.setTimeForm(
                   selectedDate.add(provider.duration),
                 );
-                print("here is key ${provider.populardata!.id}");
 
                 if (formKey.currentState!.validate()) {
-                  String? subject = provider.populardata?.title;
-                  if (subject != "") {
-                    final Appointment newAppointment = Appointment(
-                      subject: subject!,
-                      startTime: selectedDate,
-                      endTime: selectedDate.add(
-                        provider.duration,
-                      ),
-                      color: getRandomColorWithOpacity(0.6),
-                    );
+                  // final Appointment newAppointment = Appointment(
+                  //   subject: subject!,
+                  //   startTime: selectedDate,
+                  //   endTime: selectedDate.add(
+                  //     provider.duration,
+                  //   ),
+                  //   color: getRandomColorWithOpacity(0.6),
+                  // );
 
-                    WeekActivity weekActivity = WeekActivity(
-                        week: week,
-                        slot: Slot(
-                            date: selecteddate,
-                            dayOfWeek: weekofday,
-                            timeSlots: [
-                              TimeSlotAddActivity(
-                                  start: starttime,
-                                  end: endTime,
-                                  activity: provider.populardata!.id,
-                                  availExtraService: true)
-                            ]));
-                    provider.getActivityToCalendar(weekActivity);
-                    Provider.of<HomeProvider>(context, listen: false)
-                        .setAppointment(newAppointment);
-                    provider.getCalenders();
-                    print(week);
-                    Navigator.of(context).pop();
-                  }
+                  // WeekActivity weekActivity = WeekActivity(
+                  //     week: week,
+                  //     slot: Slot(
+                  //         date: selecteddate,
+                  //         dayOfWeek: weekofday,
+                  //         timeSlots: [
+                  //           TimeSlotAddActivity(
+                  //               start: starttime,
+                  //               end: endTime,
+                  //               activity: provider.populardata!.id,
+                  //               availExtraService: true)
+                  //         ]));
+                  final availability = Availability(
+                    dayOfWeek: weekofday,
+                    timeSlots: [TimeSlot(start: starttime, end: endTime)],
+                  );
+                  // provider.getActivityToCalendar(weekActivity);
+                  // Provider.of<HomeProvider>(context, listen: false)
+                  //     .setAppointment(newAppointment);
+
+                  // provider.getCalenders();
+
+                  String availabilityJson =
+                      Availability.toJson([availability, availability]);
+                  service.getavalibitlities(availabilityJson);
+
+                  Navigator.of(context).pop();
                 }
+
                 provider.clearPopularData();
               },
             )

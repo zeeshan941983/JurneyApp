@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
+
+import 'package:ibiza/screens/10_add_service/provider/service_provider.dart';
 import 'package:ibiza/screens/10_add_service/widgets/discription_textfield.dart';
+import 'package:provider/provider.dart';
 
 class ServiceTitle extends StatefulWidget {
   const ServiceTitle({super.key});
@@ -16,45 +19,48 @@ class _ServiceTitleState extends State<ServiceTitle> {
   int max = 32;
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppText(
-            text: 'Now let’s give your service a title',
-            fontSize: 20.sp,
-            color: AppColors.col222222,
-            fontWeight: FontWeight.w600,
-          ),
-          10.h.ph,
-          AppText(
-            text:
-                'Short titles work best. Have fun with it - you can always change it later',
-            fontSize: 14.sp,
-            color: AppColors.col6A6A6A,
-            fontWeight: FontWeight.w400,
-          ),
-          10.h.ph,
-          Container(
-            height: 232.h,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24.r),
-              border: Border.all(width: 1.w, color: Colors.grey),
+    return Consumer<ServiceProvider>(
+      builder: (context, value, child) => SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppText(
+              text: 'Now let’s give your service a title',
+              fontSize: 20.sp,
+              color: AppColors.col222222,
+              fontWeight: FontWeight.w600,
             ),
-            child: DiscriptionTextfield(
-              max: max,
-              onChanged: (value) {
-                setState(() {
-                  count = value.length;
-                });
-              },
+            10.h.ph,
+            AppText(
+              text:
+                  'Short titles work best. Have fun with it - you can always change it later',
+              fontSize: 14.sp,
+              color: AppColors.col6A6A6A,
+              fontWeight: FontWeight.w400,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("$count/$max"),
-          ),
-        ],
+            10.h.ph,
+            Container(
+              height: 232.h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24.r),
+                border: Border.all(width: 1.w, color: Colors.grey),
+              ),
+              child: DiscriptionTextfield(
+                controller: value.titleController,
+                max: max,
+                onChanged: (value) {
+                  setState(() {
+                    count = value.length;
+                  });
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text("$count/$max"),
+            ),
+          ],
+        ),
       ),
     );
   }

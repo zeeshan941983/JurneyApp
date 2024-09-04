@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
 import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
+import 'package:ibiza/screens/10_add_service/provider/service_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class SelectActivityCalendar extends StatefulWidget {
@@ -55,111 +57,114 @@ class _SpecialRegionsCalendarState extends State<SelectActivityCalendar> {
   Widget build(BuildContext context) {
     final List<String> days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-    return Column(
-      children: [
-        Stack(
-          children: [
-            Container(
-              height: 0.759.sh,
-              decoration: BoxDecoration(
+    return Consumer<ServiceProvider>(
+      builder: (context, value, child) => Column(
+        children: [
+          Stack(
+            children: [
+              Container(
+                height: 0.759.sh,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(width: 1.w, color: AppColors.col1E99A1),
+                ),
+                child: SfCalendar(
+                  showWeekNumber: true,
+                  controller: calendarController,
+                  specialRegions: regions,
+                  viewNavigationMode: ViewNavigationMode.none,
+                  allowViewNavigation: false,
+                  allowAppointmentResize: false,
+                  onAppointmentResizeEnd: (appointmentResizeEndDetails) {},
+                  allowDragAndDrop: true,
+                  showCurrentTimeIndicator: true,
+                  viewHeaderStyle: const ViewHeaderStyle(
+                    backgroundColor: Colors.teal,
+                    dateTextStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600),
+                    dayTextStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  view: selectedDays.isEmpty
+                      ? CalendarView.week
+                      : CalendarView.day,
+                  backgroundColor: Colors.white,
+                  timeRegionBuilder: _getSpecialRegionWidget,
+                  timeSlotViewSettings: TimeSlotViewSettings(
+                    timeFormat: "HH:mm",
+                    dayFormat: 'EEE',
+                    allDayPanelColor: Colors.amber,
+                    timelineAppointmentHeight: 100,
+                    numberOfDaysInView:
+                        selectedDays.isEmpty ? 7 : selectedDays.length,
+                    startHour: 0,
+                    endHour: 24,
+                    nonWorkingDays: selectedDays.isEmpty ? [7] : selectedDays,
+                  ),
+                  dataSource: widget.homeProvider.events,
+                  onTap: (calendarTapDetails) {
+                    value.onCalendarTapped(calendarTapDetails, context);
+                  },
+                  weekNumberStyle: const WeekNumberStyle(
+                    textStyle: TextStyle(
+                        color: AppColors.col064549,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+              Container(
+                height: 50,
                 color: Colors.white,
-                border: Border.all(width: 1.w, color: AppColors.col1E99A1),
               ),
-              child: SfCalendar(
-                showWeekNumber: true,
-                controller: calendarController,
-                specialRegions: regions,
-                viewNavigationMode: ViewNavigationMode.none,
-                allowViewNavigation: false,
-                allowAppointmentResize: false,
-                onAppointmentResizeEnd: (appointmentResizeEndDetails) {},
-                allowDragAndDrop: true,
-                showCurrentTimeIndicator: true,
-                viewHeaderStyle: const ViewHeaderStyle(
-                  backgroundColor: Colors.teal,
-                  dateTextStyle: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600),
-                  dayTextStyle: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600),
-                ),
-                view:
-                    selectedDays.isEmpty ? CalendarView.week : CalendarView.day,
-                backgroundColor: Colors.white,
-                timeRegionBuilder: _getSpecialRegionWidget,
-                timeSlotViewSettings: TimeSlotViewSettings(
-                  timeFormat: "HH:mm",
-                  dayFormat: 'EEE',
-                  allDayPanelColor: Colors.amber,
-                  timelineAppointmentHeight: 100,
-                  numberOfDaysInView:
-                      selectedDays.isEmpty ? 7 : selectedDays.length,
-                  startHour: 0,
-                  endHour: 24,
-                  nonWorkingDays: selectedDays.isEmpty ? [7] : selectedDays,
-                ),
-                dataSource: widget.homeProvider.events,
-                onTap: (calendarTapDetails) {
-                  widget.homeProvider
-                      .onCalendarTapped(calendarTapDetails, context);
-                },
-                weekNumberStyle: const WeekNumberStyle(
-                  textStyle: TextStyle(
-                      color: AppColors.col064549,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-            ),
-            Container(
-              height: 50,
-              color: Colors.white,
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(7, (index) {
-                  final isSelected = selectedDays.contains(index);
-                  return ElevatedButton(
-                    onPressed: () {
-                      _updateSelectedDays(index);
-                      if (selectedDays.isNotEmpty) {
-                        calendarController.displayDate =
-                            _getDateForDay(selectedDays.first);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          isSelected ? AppColors.col1E99A1 : Colors.white,
-                      foregroundColor: isSelected ? Colors.white : Colors.black,
-                      side: BorderSide(color: Colors.grey.shade300),
-                      maximumSize: Size(45.w, 20.h),
-                      minimumSize: Size(45.w, 20.h),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.generate(7, (index) {
+                    final isSelected = selectedDays.contains(index);
+                    return ElevatedButton(
+                      onPressed: () {
+                        _updateSelectedDays(index);
+                        if (selectedDays.isNotEmpty) {
+                          calendarController.displayDate =
+                              _getDateForDay(selectedDays.first);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            isSelected ? AppColors.col1E99A1 : Colors.white,
+                        foregroundColor:
+                            isSelected ? Colors.white : Colors.black,
+                        side: BorderSide(color: Colors.grey.shade300),
+                        maximumSize: Size(45.w, 20.h),
+                        minimumSize: Size(45.w, 20.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: EdgeInsets.zero,
                       ),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: AppText(
-                      text: days[index],
-                      fontSize: 10.sp,
-                      color: isSelected
-                          ? AppColors.colFFFFFF
-                          : AppColors.col1E99A1,
-                    ),
-                  ).withPadding(
-                    padding: EdgeInsets.only(right: 2.sp),
-                  );
-                }),
+                      child: AppText(
+                        text: days[index],
+                        fontSize: 10.sp,
+                        color: isSelected
+                            ? AppColors.colFFFFFF
+                            : AppColors.col1E99A1,
+                      ),
+                    ).withPadding(
+                      padding: EdgeInsets.only(right: 2.sp),
+                    );
+                  }),
+                ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 

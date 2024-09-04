@@ -48,7 +48,8 @@ class ServiceCondition extends StatelessWidget {
                       onTap: () {
                         provider.selectCondition(
                             conditions?[index].name ?? 'Windy',
-                            conditions?[index].icon ?? AppImages.wind);
+                            conditions?[index].icon ?? AppImages.wind,
+                            conditions?[index].id.toString() ?? 1.toString());
                       },
                       child: ServicesContainer(
                         icon: conditions?[index].icon ?? AppImages.wind,
@@ -72,7 +73,9 @@ class ServiceCondition extends StatelessWidget {
                     (index) => GestureDetector(
                       onTap: () {
                         provider.selectCondition(
-                            conditions[index].name, conditions[index].icon);
+                            conditions[index].name,
+                            conditions[index].icon,
+                            conditions[index].id.toString());
                       },
                       child: ServicesContainer(
                         icon: conditions[index].icon,

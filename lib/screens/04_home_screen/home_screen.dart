@@ -22,14 +22,19 @@ class HomeScreen extends StatelessWidget {
         child: GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           child: Scaffold(
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const Section1(),
-                  Section2(),
-                  Section3(homeProvider: provider),
-                  SectionFooter(),
-                ],
+            body: RefreshIndicator(
+              onRefresh: () async {
+                await provider.getPopularService();
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const Section1(),
+                    Section2(),
+                    Section3(homeProvider: provider),
+                    SectionFooter(),
+                  ],
+                ),
               ),
             ),
           ),

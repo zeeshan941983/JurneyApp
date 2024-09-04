@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:ibiza/core/models/most_popular_post.dart';
 import 'package:ibiza/screens/01_splas_screen/splash_screen.dart';
 import 'package:ibiza/screens/02_login_screen/login_screen.dart';
 import 'package:ibiza/screens/03_sign_up_screen/sign_up_screen.dart';
@@ -51,8 +52,11 @@ class AppRoutes {
           'Navigate to $HomeScreen()',
         );
       case detailsScreen:
+        final DocumentModel documentModel = settings.arguments as DocumentModel;
         return _buildPageRoute(
-          const DetailsScreen(),
+          DetailsScreen(
+            popularSerivce: documentModel,
+          ),
           settings,
           'Navigate to $DetailsScreen()',
         );

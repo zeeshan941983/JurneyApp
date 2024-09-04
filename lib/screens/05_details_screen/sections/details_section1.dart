@@ -1,14 +1,30 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
 
 class DetailsSection1 extends StatelessWidget {
+  final List<String> images;
+
   const DetailsSection1({
     super.key,
+    required this.images,
   });
 
   @override
   Widget build(BuildContext context) {
+    // log(images.length.toString());
+    for (var i = 5; images.length < i; i++) {
+      images.add(
+          "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png");
+    }
+
+    // String imageUrl = images.isNotEmpty
+    //     ? images.first
+    //     : 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png';
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: Column(
@@ -59,9 +75,10 @@ class DetailsSection1 extends StatelessWidget {
           10.h.ph,
 
           ///TODO: Change image to Network
-          Image.asset(
+          Image.network(
             images.first,
-            height: 316,
+            filterQuality: FilterQuality.medium,
+            height: 316.h,
             width: double.infinity,
             fit: BoxFit.cover,
           ),
@@ -76,8 +93,9 @@ class DetailsSection1 extends StatelessWidget {
             ),
             itemCount: 4,
             itemBuilder: (BuildContext context, int index) {
-              return Image.asset(
+              return Image.network(
                 images[index],
+                filterQuality: FilterQuality.medium,
                 fit: BoxFit.cover,
               );
             },

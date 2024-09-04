@@ -24,6 +24,7 @@ class DetailsSection3 extends StatelessWidget {
             listOfservicesOffers.length,
             (index) {
               final service = listOfservicesOffers[index];
+
               return Row(
                 children: [
                   ImageIcon(
@@ -37,7 +38,9 @@ class DetailsSection3 extends StatelessWidget {
                     color: AppColors.col222222,
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w400,
-                    textDecoration: service.available ? TextDecoration.none : TextDecoration.lineThrough,
+                    textDecoration: service.available
+                        ? TextDecoration.none
+                        : TextDecoration.lineThrough,
                   ),
                 ],
               ).withPadding(padding: EdgeInsets.symmetric(vertical: 5.h));

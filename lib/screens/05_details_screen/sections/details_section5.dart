@@ -86,7 +86,7 @@ class DetailsSection5 extends StatelessWidget {
           ),
           10.h.ph,
           Container(
-            height: 214.h,
+            height: 245.h,
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 30.h),
             decoration: BoxDecoration(

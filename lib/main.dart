@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ibiza/core/api/endpoints.dart';
 import 'package:ibiza/core/api/requests.dart';
 import 'package:ibiza/core/constants/constants.dart';
@@ -69,29 +70,22 @@ class Checkdata extends StatefulWidget {
 }
 
 class _CheckdataState extends State<Checkdata> {
+  GoogleMapController? _mapController;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Consumer<HomeProvider>(
-          builder: (context, value, child) => Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-                    value.getPopularService();
-                    print(value.popularServiceModel.documents);
-                  },
-                  child: Text("data")),
-              ElevatedButton(
-                  onPressed: () {
-                    // value.pickImages();
-                  },
-                  child: Text("pick"))
-            ],
-          ),
+          child: Consumer<ServiceProvider>(
+        builder: (context, value, child) => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.network(value.serviceOffers[0].iconURL),
+            for (var element in value.serviceOffers[0].priceModel)
+              Text(element.name),
+          ],
         ),
-      ),
+      )),
     );
   }
 }

@@ -18,6 +18,7 @@ import 'package:ibiza/core/widgets/show_add_app_dialouge.dart';
 import 'package:ibiza/screens/04_home_screen/models/card_model.dart';
 import 'package:ibiza/screens/04_home_screen/models/sites_model.dart';
 import 'package:intl/intl.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -455,10 +456,6 @@ class HomeProvider extends BaseViewModel {
     String formate = DateFormat('EEEE').format(date);
     return formate;
   }
-
-  ///
-
-  ///
 }
 
 class DataSource extends CalendarDataSource {

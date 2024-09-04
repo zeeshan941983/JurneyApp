@@ -2,6 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:ibiza/core/api/endpoints.dart';
 import 'package:ibiza/core/api/requests.dart';
 
@@ -12,11 +14,14 @@ import 'package:ibiza/core/models/category_model.dart';
 import 'package:ibiza/core/models/preview_model.dart';
 import 'package:ibiza/core/view_model/base_view_model.dart';
 import 'package:ibiza/screens/04_home_screen/models/sites_model.dart';
+import 'package:ibiza/screens/10_add_service/widgets/addService_Dialog.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class ServiceProvider extends BaseViewModel {
   ///Initialize And Get Important Things
@@ -24,7 +29,16 @@ class ServiceProvider extends BaseViewModel {
     getConditions();
     getServicesOffers();
   }
+  ///////////********Contollers ********** */
+  ///
+  TextEditingController titleController = TextEditingController();
+  TextEditingController discriptionController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController extraController = TextEditingController();
+  TextEditingController reservationController = TextEditingController();
 
+  ///
   bool _addService = false;
   bool get addService => _addService;
   set addService(value) {
@@ -180,29 +194,39 @@ class ServiceProvider extends BaseViewModel {
   }
 
 ////***********Services**********/////
+  ///
+  String avalibilities = '';
+  void getavalibitlities(String avalibility) {
+    avalibilities = avalibility;
+    notifyListeners();
+  }
+
   List<dynamic> _services = [];
   List<dynamic> get services => _services;
 
   Future<Map<String, dynamic>> setServices() async {
     try {
       PreviewService previewData = PreviewService(
-        title: 'Example Title',
+        title: titleController.text,
         address:
-            '{"description":"528A Commercial Rd, London E1 0HY, UK","location":{"lat":51.513086693162236,"lng":-0.042528380008144635}}',
+            '{"description":"$address","location":{"lat":${_currentPosition!.latitude},"lng":${_currentPosition!.longitude}}}',
         category: '605c72ef9b1e8f001f8c7f2b',
         subCategory: '605c72ef9b1e8f001f8c7f2c',
         images: [for (var image in _images) image],
-        conditions: ['60a79adfd3214e31a4b9c8f8'],
-        description: 'Example description',
-        extraMessage: 'Additional message',
-        availabilities:
-            '[{"dayOfWeek":"Saturday","timeSlots":[{"start":"11:00","end":"12:00"},{"start":"14:00","end":"16:00"}]},{"dayOfWeek":"Tuesday","timeSlots":[{"start":"06:00","end":"08:00"}]}]',
-        pricingModel: '60a79adfd3214e31a4b9c8f8',
+        conditions: [
+          selections['conditions']?[0].id,
+        ],
+        description: discriptionController.text,
+        extraMessage: extraController.text,
+        availabilities: avalibilities.isEmpty
+            ? '[{"dayOfWeek":"Saturday","timeSlots":[{"start":"11:00","end":"12:00"},{"start":"14:00","end":"16:00"}]},{"dayOfWeek":"Tuesday","timeSlots":[{"start":"06:00","end":"08:00"}]}]'
+            : avalibilities,
+        pricingModel: _selections['serviceData'].pricemodel,
         peopleCanJoin: '2',
-        price: '9999',
+        price: price.toString(),
         reservationConfirmation: 'true',
-        amenities: "",
-        extras: '8989',
+        amenities: selections['Amenity']?[0].id,
+        extras: "0.00",
       );
       final prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString(USER_TOKEN);
@@ -216,7 +240,7 @@ class ServiceProvider extends BaseViewModel {
       );
 
       if (response.statusCode == 201) {
-        log('Service created successfully');
+        log('Service created successfully+${_selections['serviceData'].pricemodel}');
         print(response.body);
       } else {
         print('Failed to create service: ${response.statusCode}');
@@ -226,6 +250,12 @@ class ServiceProvider extends BaseViewModel {
       log(e.toString());
     }
     return {};
+  }
+
+  void onCalendarTapped(CalendarTapDetails details, BuildContext context) {
+    if (details.targetElement == CalendarElement.calendarCell) {
+      showAddAppointmentServicesDialog(details.date!, context);
+    }
   }
 
 ////***********Services End**********/////
@@ -265,14 +295,14 @@ class ServiceProvider extends BaseViewModel {
 
   Map<String, dynamic> get selections => _selections;
 
-  void selectOption(
-      String option, String serviceName, String iconofServiceName) {
+  void selectOption(String option, String serviceName, String iconofServiceName,
+      String priceModel) {
     _selections.clear();
     _selections['serviceData'] = ServiceSelection(
-      serviceName: serviceName,
-      selectedOption: option,
-      iconofServiceName: iconofServiceName,
-    );
+        serviceName: serviceName,
+        selectedOption: option,
+        iconofServiceName: iconofServiceName,
+        pricemodel: priceModel);
     notifyListeners();
     log(_selections.length.toString());
   }
@@ -309,7 +339,7 @@ class ServiceProvider extends BaseViewModel {
 
   /////
   ////save consitions
-  void selectCondition(String condition, String geticon) {
+  void selectCondition(String condition, String geticon, String id) {
     if (_selections['conditions'] == null) {
       _selections['conditions'] = <GetConditions>[];
     }
@@ -319,7 +349,11 @@ class ServiceProvider extends BaseViewModel {
     bool exists = conditionsList.any((c) => c.conditions == condition);
 
     if (!exists) {
-      conditionsList.add(GetConditions(icon: geticon, conditions: condition));
+      conditionsList.add(GetConditions(
+        id: id,
+        icon: geticon,
+        conditions: condition,
+      ));
     }
 
     if (conditionsList.length > 2) {
@@ -327,6 +361,7 @@ class ServiceProvider extends BaseViewModel {
     }
 
     notifyListeners();
+
     log(conditionsList.map((c) => c.conditions).join(', '));
   }
 
@@ -402,17 +437,79 @@ class ServiceProvider extends BaseViewModel {
   }
 
   ///
+
+  ///
+  //****************************************************//
+  ///            get current Location
+  //****************************************************//
+  Position? _currentPosition;
+  String? _locationError;
+
+  Position? get currentPosition => _currentPosition;
+  String? get locationError => _locationError;
+  String _address = '';
+  String get address => _address;
+  Future<void> getCurentLocation() async {
+    try {
+      await _checkPermission();
+      _currentPosition = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      getAddressFromLatLng(
+          _currentPosition!.latitude, _currentPosition!.longitude);
+      notifyListeners();
+    } catch (e) {
+      _locationError = e.toString();
+      notifyListeners();
+    }
+  }
+
+  Future<void> _checkPermission() async {
+    PermissionStatus permission = await Permission.location.status;
+
+    if (permission != PermissionStatus.granted) {
+      PermissionStatus newPermission = await Permission.location.request();
+      if (newPermission != PermissionStatus.granted) {
+        throw Exception("Location permission denied");
+      }
+    }
+  }
+
+  Future<void> refreshLocation() async {
+    _currentPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    notifyListeners();
+  }
+
+  Future<void> getAddressFromLatLng(double lat, double lng) async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+      Placemark place = placemarks[0];
+      log("place: ${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}");
+      _address =
+          '${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}';
+
+      notifyListeners();
+    } catch (e) {
+      _address = 'Failed to get address';
+      notifyListeners();
+      print(e);
+    }
+  }
+
+  ///
 }
 
 class ServiceSelection {
   final String serviceName;
   final String selectedOption;
   final String iconofServiceName;
+  final String pricemodel;
 
   ServiceSelection({
     required this.serviceName,
     required this.selectedOption,
     required this.iconofServiceName,
+    required this.pricemodel,
   });
 }
 
@@ -425,9 +522,11 @@ class ReservationService {
 }
 
 class GetConditions {
+  final String id;
   final String conditions;
   final String icon;
   GetConditions({
+    required this.id,
     required this.icon,
     required this.conditions,
   });
