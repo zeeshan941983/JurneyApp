@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class BubbleMessage extends StatelessWidget {
   final List<SubCategory> subCategories;
   final String? selectedOption;
-  final ValueChanged<String> onOptionSelected;
+  final ValueChanged<List<String>> onOptionSelected;
   final bool istrue;
 
   const BubbleMessage(
@@ -86,7 +86,8 @@ class BubbleMessage extends StatelessWidget {
                     backgroundColor:
                         isSelected ? Colors.grey.shade200 : Colors.white,
                   ),
-                  onPressed: () => onOptionSelected(title),
+                  onPressed: () =>
+                      onOptionSelected([title, subCategories[index].id]),
                   child: Text(
                     title,
                     style: const TextStyle(color: Colors.black, fontSize: 13),

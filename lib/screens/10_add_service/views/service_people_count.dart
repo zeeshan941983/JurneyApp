@@ -51,7 +51,8 @@ class ServicePeopleCount extends StatelessWidget {
           ),
           if (provider.minnumberOfPeople > provider.maxnumberOfPeople)
             AppText(
-              text: 'Minumum Number of People should be less then Maximum Number of People',
+              text:
+                  'Minumum Number of People should be less then Maximum Number of People',
               color: Colors.red[300],
               fontSize: 13.sp,
             ),
@@ -75,11 +76,13 @@ class ServicePeopleCount extends StatelessWidget {
             onTapAdd: provider.maxincrment,
             onChange: (p0) {
               if (p0.isNotEmpty) provider.maxnumberOfPeople = int.parse(p0);
+              provider.selectPeople();
             },
           ),
           if (provider.maxnumberOfPeople < provider.minnumberOfPeople)
             AppText(
-              text: 'Maximum Number should be greater then Minumum Number of People',
+              text:
+                  'Maximum Number should be greater then Minumum Number of People',
               color: Colors.red[300],
               fontSize: 13.sp,
             )

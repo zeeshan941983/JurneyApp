@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
@@ -82,19 +80,17 @@ class _ServiceTypeState extends State<ServiceType> {
                                 onTap: () {
                                   setState(() {
                                     expandedIndex = isExpanded ? null : index;
-                                    log(serviceOptionsProvider
-                                        .serviceOffers[index].priceModel[0].id);
+                                    final value = serviceOptionsProvider
+                                        .serviceOffers[index];
+
                                     if (!isExpanded) {
                                       serviceOptionsProvider.selectOption(
-                                          '',
-                                          serviceOptionsProvider
-                                              .serviceOffers[index].name,
-                                          serviceOptionsProvider
-                                              .serviceOffers[index].iconURL,
-                                          serviceOptionsProvider
-                                              .serviceOffers[index]
-                                              .priceModel[0]
-                                              .id);
+                                          option: "",
+                                          serviceName: value.name,
+                                          iconofServiceName: value.iconURL,
+                                          priceModel: value.priceModel[0].id,
+                                          categoryId: value.id,
+                                          subcategory: "");
                                     }
                                   });
                                 },
@@ -118,7 +114,8 @@ class _ServiceTypeState extends State<ServiceType> {
                           serviceOptionsProvider.serviceOffers.length,
                           (index) {
                             final isExpanded = expandedIndex == index;
-
+                            final value =
+                                serviceOptionsProvider.serviceOffers[index];
                             return isExpanded
                                 ? Padding(
                                     padding: EdgeInsets.only(top: data(index)),
@@ -131,15 +128,12 @@ class _ServiceTypeState extends State<ServiceType> {
                                           ?.selectedOption,
                                       onOptionSelected: (option) {
                                         serviceOptionsProvider.selectOption(
-                                            option,
-                                            serviceOptionsProvider
-                                                .serviceOffers[index].name,
-                                            serviceOptionsProvider
-                                                .serviceOffers[index].iconURL,
-                                            serviceOptionsProvider
-                                                .serviceOffers[index]
-                                                .priceModel[0]
-                                                .id);
+                                            option: option[0],
+                                            serviceName: value.name,
+                                            iconofServiceName: value.iconURL,
+                                            priceModel: value.priceModel[0].id,
+                                            categoryId: value.id,
+                                            subcategory: option[1]);
                                       },
                                     ),
                                   )

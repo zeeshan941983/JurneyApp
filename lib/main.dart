@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:ibiza/core/api/endpoints.dart';
 import 'package:ibiza/core/api/requests.dart';
 import 'package:ibiza/core/constants/constants.dart';
@@ -70,8 +70,6 @@ class Checkdata extends StatefulWidget {
 }
 
 class _CheckdataState extends State<Checkdata> {
-  GoogleMapController? _mapController;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

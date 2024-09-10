@@ -13,6 +13,9 @@ import 'package:ibiza/core/models/aminities.dart';
 import 'package:ibiza/core/models/category_model.dart';
 import 'package:ibiza/core/models/preview_model.dart';
 import 'package:ibiza/core/view_model/base_view_model.dart';
+import 'package:ibiza/core/widgets/custom_loader.dart';
+import 'package:ibiza/main.dart';
+import 'package:ibiza/screens/04_home_screen/home_screen.dart';
 import 'package:ibiza/screens/04_home_screen/models/sites_model.dart';
 import 'package:ibiza/screens/10_add_service/widgets/addService_Dialog.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,6 +40,12 @@ class ServiceProvider extends BaseViewModel {
   TextEditingController priceController = TextEditingController();
   TextEditingController extraController = TextEditingController();
   TextEditingController reservationController = TextEditingController();
+  TextEditingController countryController = TextEditingController();
+  TextEditingController streetController = TextEditingController();
+  TextEditingController appartmentController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  TextEditingController stateController = TextEditingController();
+  TextEditingController zipcodeController = TextEditingController();
 
   ///
   bool _addService = false;
@@ -201,17 +210,38 @@ class ServiceProvider extends BaseViewModel {
     notifyListeners();
   }
 
+  void clearall() {
+    _selections.clear();
+    _images.clear();
+    titleController.clear();
+    discriptionController.clear();
+    addressController.clear();
+    priceController.clear();
+    extraController.clear();
+    _currentPage = 0;
+    maxController.clear();
+    _address = '';
+    countryController.clear();
+    streetController.clear();
+    appartmentController.clear();
+    cityController.clear();
+    stateController.clear();
+    zipcodeController.clear();
+
+    notifyListeners();
+  }
+
   List<dynamic> _services = [];
   List<dynamic> get services => _services;
 
-  Future<Map<String, dynamic>> setServices() async {
+  Future<Map<String, dynamic>> setServices(BuildContext context) async {
     try {
       PreviewService previewData = PreviewService(
         title: titleController.text,
         address:
-            '{"description":"$address","location":{"lat":${_currentPosition!.latitude},"lng":${_currentPosition!.longitude}}}',
-        category: '605c72ef9b1e8f001f8c7f2b',
-        subCategory: '605c72ef9b1e8f001f8c7f2c',
+            '{"description":"${"${countryController.text}${streetController.text}${appartmentController.text}${cityController.text}${stateController.text}${zipcodeController.text}"}","location":{"lat":${_currentPosition!.latitude},"lng":${_currentPosition!.longitude}}}',
+        category: _selections['serviceData'].categoryId,
+        subCategory: _selections['serviceData'].subCategory,
         images: [for (var image in _images) image],
         conditions: [
           selections['conditions']?[0].id,
@@ -222,7 +252,7 @@ class ServiceProvider extends BaseViewModel {
             ? '[{"dayOfWeek":"Saturday","timeSlots":[{"start":"11:00","end":"12:00"},{"start":"14:00","end":"16:00"}]},{"dayOfWeek":"Tuesday","timeSlots":[{"start":"06:00","end":"08:00"}]}]'
             : avalibilities,
         pricingModel: _selections['serviceData'].pricemodel,
-        peopleCanJoin: '2',
+        peopleCanJoin: maxnumberOfPeople.toString(),
         price: price.toString(),
         reservationConfirmation: 'true',
         amenities: selections['Amenity']?[0].id,
@@ -242,6 +272,11 @@ class ServiceProvider extends BaseViewModel {
       if (response.statusCode == 201) {
         log('Service created successfully+${_selections['serviceData'].pricemodel}');
         print(response.body);
+
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => HomeScreen()));
+
+        clearall();
       } else {
         print('Failed to create service: ${response.statusCode}');
         print('Response body: ${response.body}');
@@ -295,14 +330,21 @@ class ServiceProvider extends BaseViewModel {
 
   Map<String, dynamic> get selections => _selections;
 
-  void selectOption(String option, String serviceName, String iconofServiceName,
-      String priceModel) {
+  void selectOption(
+      {required String option,
+      required String serviceName,
+      required String iconofServiceName,
+      required String priceModel,
+      required String categoryId,
+      required String subcategory}) {
     _selections.clear();
     _selections['serviceData'] = ServiceSelection(
         serviceName: serviceName,
         selectedOption: option,
         iconofServiceName: iconofServiceName,
-        pricemodel: priceModel);
+        pricemodel: priceModel,
+        categoryId: categoryId,
+        subCategory: subcategory);
     notifyListeners();
     log(_selections.length.toString());
   }
@@ -504,13 +546,16 @@ class ServiceSelection {
   final String selectedOption;
   final String iconofServiceName;
   final String pricemodel;
+  final String categoryId;
+  final String subCategory;
 
-  ServiceSelection({
-    required this.serviceName,
-    required this.selectedOption,
-    required this.iconofServiceName,
-    required this.pricemodel,
-  });
+  ServiceSelection(
+      {required this.serviceName,
+      required this.selectedOption,
+      required this.iconofServiceName,
+      required this.pricemodel,
+      required this.categoryId,
+      required this.subCategory});
 }
 
 class ReservationService {

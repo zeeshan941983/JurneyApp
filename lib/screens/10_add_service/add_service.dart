@@ -92,14 +92,18 @@ class _UserDetailsScreenState extends State<AddServiceScreen> {
                         Align(
                           alignment: Alignment.bottomRight,
                           child: AppButton(
-                              text: 'Next',
+                              text:
+                                  provider.currentPage == 12 ? 'Save' : "Next",
                               width: 98.w,
                               height: 45.h,
                               radius: 35.r,
                               onTap: () {
-                                _pageController.nextPage(
-                                    duration: Durations.extralong3,
-                                    curve: Curves.ease);
+                                FocusScope.of(context).unfocus();
+                                provider.currentPage == 12
+                                    ? provider.setServices(context)
+                                    : _pageController.nextPage(
+                                        duration: Durations.extralong3,
+                                        curve: Curves.ease);
                               }),
                         ),
                         15.h.ph,

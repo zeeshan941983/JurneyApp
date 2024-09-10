@@ -396,11 +396,6 @@ class _FullPreviewPageState extends State<FullPreviewPage> {
                           ),
                           5.h.ph,
                           Text('${value.count}/${value.max}'),
-                          ElevatedButton(
-                              onPressed: () {
-                                value.setServices();
-                              },
-                              child: Text("data"))
                         ],
                       ),
                     ],
