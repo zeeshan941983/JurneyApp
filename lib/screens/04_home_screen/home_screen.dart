@@ -8,6 +8,7 @@ import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
 import 'package:ibiza/screens/04_home_screen/sections/section_1.dart';
 import 'package:ibiza/screens/04_home_screen/sections/section_2.dart';
 import 'package:ibiza/screens/04_home_screen/sections/section_footer.dart';
+import 'package:ibiza/screens/04_home_screen/widget/drawer.dart';
 import 'package:provider/provider.dart';
 import 'sections/section_3.dart';
 
@@ -15,6 +16,7 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Consumer<HomeProvider>(
       builder: (context, provider, child) => ModalProgressHUD(
         inAsyncCall: provider.state == ViewState.busy,
@@ -22,6 +24,8 @@ class HomeScreen extends StatelessWidget {
         child: GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           child: Scaffold(
+            key: scaffoldKey,
+            drawer: const AppDrawer(),
             body: RefreshIndicator(
               onRefresh: () async {
                 await provider.getPopularService();
@@ -29,7 +33,9 @@ class HomeScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const Section1(),
+                    Section1(
+                      scaffoldKey: scaffoldKey,
+                    ),
                     Section2(),
                     Section3(homeProvider: provider),
                     SectionFooter(),

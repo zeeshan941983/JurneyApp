@@ -13,9 +13,7 @@ import 'package:ibiza/core/models/aminities.dart';
 import 'package:ibiza/core/models/category_model.dart';
 import 'package:ibiza/core/models/preview_model.dart';
 import 'package:ibiza/core/view_model/base_view_model.dart';
-import 'package:ibiza/core/widgets/custom_loader.dart';
-import 'package:ibiza/main.dart';
-import 'package:ibiza/screens/04_home_screen/home_screen.dart';
+
 import 'package:ibiza/screens/04_home_screen/models/sites_model.dart';
 import 'package:ibiza/screens/10_add_service/widgets/addService_Dialog.dart';
 import 'package:image_picker/image_picker.dart';
@@ -227,6 +225,7 @@ class ServiceProvider extends BaseViewModel {
     cityController.clear();
     stateController.clear();
     zipcodeController.clear();
+    _maxNumberOfPeople = 1;
 
     notifyListeners();
   }
@@ -272,9 +271,6 @@ class ServiceProvider extends BaseViewModel {
       if (response.statusCode == 201) {
         log('Service created successfully+${_selections['serviceData'].pricemodel}');
         print(response.body);
-
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomeScreen()));
 
         clearall();
       } else {

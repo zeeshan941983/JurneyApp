@@ -391,6 +391,10 @@ class HomeProvider extends BaseViewModel {
     log('--------------4-------------');
   }
 
+  Future<PopularModel> futurepopular() async {
+    return popularServiceModel;
+  }
+
   ///DELETE USER ACCOUNT
   deleteUser() async {
     final prefs = await SharedPreferences.getInstance();

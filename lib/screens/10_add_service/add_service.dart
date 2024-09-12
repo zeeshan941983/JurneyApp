@@ -5,6 +5,8 @@ import 'package:ibiza/core/widgets/app_button.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
 import 'package:ibiza/core/widgets/custom_app_bar.dart';
 import 'package:ibiza/core/widgets/custom_loader.dart';
+import 'package:ibiza/screens/04_home_screen/home_screen.dart';
+import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
 import 'package:ibiza/screens/10_add_service/provider/service_provider.dart';
 import 'package:ibiza/screens/10_add_service/views/Calendar_activity_add.dart';
 import 'package:ibiza/screens/10_add_service/views/Create_Discription.dart';
@@ -32,8 +34,8 @@ class _UserDetailsScreenState extends State<AddServiceScreen> {
   final PageController _pageController = PageController();
   @override
   Widget build(BuildContext context) {
-    return Consumer<ServiceProvider>(
-      builder: (context, provider, child) => ModalProgressHUD(
+    return Consumer2<ServiceProvider, HomeProvider>(
+      builder: (context, provider, homeprov, child) => ModalProgressHUD(
         inAsyncCall: provider.state == ViewState.busy,
         progressIndicator: const CustomLoader(),
         child: GestureDetector(
@@ -99,11 +101,19 @@ class _UserDetailsScreenState extends State<AddServiceScreen> {
                               radius: 35.r,
                               onTap: () {
                                 FocusScope.of(context).unfocus();
-                                provider.currentPage == 12
-                                    ? provider.setServices(context)
-                                    : _pageController.nextPage(
-                                        duration: Durations.extralong3,
-                                        curve: Curves.ease);
+                                if (provider.currentPage == 12) {
+                                  provider.setServices(context);
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const HomeScreen()));
+                                  homeprov.getPopularService();
+                                } else {
+                                  _pageController.nextPage(
+                                      duration: Durations.extralong3,
+                                      curve: Curves.ease);
+                                }
                               }),
                         ),
                         15.h.ph,

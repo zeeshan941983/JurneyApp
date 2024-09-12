@@ -14,8 +14,11 @@ import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
 import 'package:provider/provider.dart';
 
 class Section1 extends StatefulWidget {
+  final GlobalKey<ScaffoldState> scaffoldKey;
+
   const Section1({
     super.key,
+    required this.scaffoldKey,
   });
 
   @override
@@ -69,8 +72,9 @@ class _Section1State extends State<Section1> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   IconButton(
-                    onPressed: () =>
-                        context.pushName(AppRoutes.userDetailsScreen),
+                    onPressed: () {
+                      widget.scaffoldKey.currentState?.openDrawer();
+                    },
                     icon: const Icon(Icons.menu),
                     iconSize: 32.sp,
                     color: Colors.white,
@@ -219,35 +223,39 @@ class _Section1State extends State<Section1> with TickerProviderStateMixin {
               SizedBox(
                 height: 307.h,
                 child: provider.popularServiceModel.documents.isNotEmpty
-                    ? ListView.builder(
-                        controller: _scrollController,
-                        itemCount:
-                            provider.popularServiceModel.documents.length,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          final popularService =
-                              provider.popularServiceModel.documents[index];
+                    ? FutureBuilder(
+                        future: provider.futurepopular(),
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
+                          return ListView.builder(
+                            controller: _scrollController,
+                            itemCount: snapshot.data.documents.length,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              final popularService =
+                                  provider.popularServiceModel.documents[index];
 
-                          String imageUrl = popularService.images.isNotEmpty
-                              ? popularService.images.first
-                              : 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png';
+                              String imageUrl = popularService.images.isNotEmpty
+                                  ? popularService.images.first
+                                  : 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png';
 
-                          return InkWell(
-                            onTap: () => context.pushName(
-                                AppRoutes.detailsScreen,
-                                arguments: popularService),
-                            child: ListCard(
-                              image: imageUrl,
-                              place: popularService.title,
-                              price: popularService.price.toDouble(),
-                              distance: 200.0,
-                              date: DateTime.now(),
-                              isDarkBG: true,
-                            ).withPadding(),
+                              return InkWell(
+                                onTap: () => context.pushName(
+                                    AppRoutes.detailsScreen,
+                                    arguments: popularService),
+                                child: ListCard(
+                                  image: imageUrl,
+                                  place: popularService.title,
+                                  price: popularService.price.toDouble(),
+                                  distance: 200.0,
+                                  date: DateTime.now(),
+                                  isDarkBG: true,
+                                ).withPadding(),
+                              );
+                            },
                           );
-                        },
-                      )
+                        })
                     : const Center(
                         child: Text("No popular services available")),
               ),
