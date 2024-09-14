@@ -44,7 +44,7 @@ class AppDrawer extends StatelessWidget {
                   title: 'Manage Listing',
                   icon: Icons.list,
                   onTap: () =>
-                      Navigator.pushNamed(context, AppRoutes.addListingScreen),
+                      Navigator.pushNamed(context, AppRoutes.listingView),
                 ),
                 listTileData(
                   title: 'Help Center',

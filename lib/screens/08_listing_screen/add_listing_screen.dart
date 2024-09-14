@@ -23,22 +23,23 @@ class AddListingScreen extends StatelessWidget {
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           child: Scaffold(
             backgroundColor: AppColors.colFFFFFF,
-            appBar: AppBar(
-              backgroundColor: AppColors.colFFFFFF,
-              leading: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.menu, size: 32.sp),
-              ),
-              actions: [
-                ImageIcon(
-                  const AssetImage(AppImages.accountlogo),
-                  size: 45.h,
-                ).withPadding(padding: EdgeInsets.only(right: 15.w)),
-              ],
-            ),
+
+            // appBar: AppBar(
+            //   backgroundColor: AppColors.colFFFFFF,
+            //   leading: IconButton(
+            //     onPressed: () {},
+            //     icon: Icon(Icons.menu, size: 32.sp),
+            //   ),
+            //   actions: [
+            //     ImageIcon(
+            //       const AssetImage(AppImages.accountlogo),
+            //       size: 45.h,
+            //     ).withPadding(padding: EdgeInsets.only(right: 15.w)),
+            //   ],
+            // ),
             body: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                padding: EdgeInsets.only(right: 10.w, left: 10.w, top: 25.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -78,7 +79,8 @@ class AddListingScreen extends StatelessWidget {
                     ),
                     5.h.ph,
                     AppText(
-                      text: 'We\'ll call or text to confirm your number. Standard messaging rates apply.',
+                      text:
+                          'We\'ll call or text to confirm your number. Standard messaging rates apply.',
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
                       color: AppColors.col7A7A7A,
@@ -99,7 +101,8 @@ class AddListingScreen extends StatelessWidget {
                       children: [
                         Expanded(
                           child: AppText(
-                            text: 'This is a simple way to help guests feel confident booking your place.',
+                            text:
+                                'This is a simple way to help guests feel confident booking your place.',
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w400,
                             color: AppColors.col7A7A7A,

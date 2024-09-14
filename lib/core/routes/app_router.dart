@@ -6,6 +6,7 @@ import 'package:ibiza/screens/02_login_screen/login_screen.dart';
 import 'package:ibiza/screens/03_sign_up_screen/sign_up_screen.dart';
 import 'package:ibiza/screens/04_home_screen/home_screen.dart';
 import 'package:ibiza/screens/05_details_screen/details_screen.dart';
+import 'package:ibiza/screens/07_account_screen/views/listing_view.dart';
 import 'package:ibiza/screens/09_user_details/user_details_screen.dart';
 import 'package:ibiza/screens/08_listing_screen/add_listing_screen.dart';
 import 'package:ibiza/screens/10_add_service/add_service.dart';
@@ -24,6 +25,7 @@ class AppRoutes {
   static const String userDetailsScreen = '/userDetailsScreen';
   static const String addServiceScreen = '/addServiceScreen';
   static const String dashboardScreen = '/dashboardScreen';
+  static const String listingView = '/listingView';
 
   static Route<dynamic> generateRoutes(RouteSettings settings) {
     switch (settings.name) {
@@ -90,6 +92,12 @@ class AppRoutes {
           const DashboardScreen(),
           settings,
           'Navigate to $DashboardScreen()',
+        );
+      case listingView:
+        return _buildPageRoute(
+          const ListingView(),
+          settings,
+          'Navigate to $listingView()',
         );
 
       default:

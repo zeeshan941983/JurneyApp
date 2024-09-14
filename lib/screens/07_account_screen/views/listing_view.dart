@@ -16,92 +16,101 @@ class _ListingViewState extends State<ListingView> {
   @override
   Widget build(BuildContext context) {
     return Consumer<AccountProvider>(
-      builder: (context, provider, child) => Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.w),
-        child: Column(
-          children: [
-            15.h.ph,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                TextButton.icon(
-                  onPressed: () => provider.onCardClicked(0),
-                  iconAlignment: IconAlignment.end,
-                  label: AppText(
-                    text: 'Account',
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.col6A6A6A,
+      builder: (context, provider, child) => Scaffold(
+        body: Padding(
+          padding: EdgeInsets.all(10.0.dg),
+          child: Column(
+            children: [
+              15.h.ph,
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.start,
+              //   children: [
+              //     TextButton.icon(
+              //       onPressed: () => provider.onCardClicked(0),
+              //       iconAlignment: IconAlignment.end,
+              //       label: AppText(
+              //         text: 'Account',
+              //         fontSize: 14.sp,
+              //         fontWeight: FontWeight.w400,
+              //         color: AppColors.col6A6A6A,
+              //       ),
+              //       icon: Icon(
+              //         Icons.keyboard_arrow_right,
+              //         size: 15.sp,
+              //         color: AppColors.col6A6A6A,
+              //       ),
+              //     ),
+              //     AppText(
+              //       text: 'Your listing',
+              //       fontSize: 14.sp,
+              //       color: AppColors.col6A6A6A,
+              //       fontWeight: FontWeight.w400,
+              //     ),
+              //   ],
+              // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  AppText(
+                    text: "Your listing",
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.col101828,
                   ),
-                  icon: Icon(
-                    Icons.keyboard_arrow_right,
-                    size: 15.sp,
-                    color: AppColors.col6A6A6A,
+                  IconButton.filledTonal(
+                    onPressed: () {
+                      context.pushName(AppRoutes.addServiceScreen);
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateColor.resolveWith(
+                          (states) => AppColors.colE2E2E2),
+                    ),
+                    icon: Icon(
+                      Icons.add,
+                      color: AppColors.col7A7A7A,
+                      size: 14.sp,
+                    ),
                   ),
-                ),
-                AppText(
-                  text: 'Your listing',
-                  fontSize: 14.sp,
-                  color: AppColors.col6A6A6A,
-                  fontWeight: FontWeight.w400,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppText(
-                  text: "Your listing",
-                  fontSize: 26.sp,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.col101828,
-                ),
-                IconButton.filledTonal(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateColor.resolveWith((states) => AppColors.colE2E2E2),
-                  ),
-                  icon: Icon(
-                    Icons.add,
+                ],
+              ),
+              10.h.ph,
+              TextField(
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
+                  hintText: 'Search listing by name or location',
+                  suffixIcon: ImageIcon(
+                    const AssetImage(AppImages.search),
+                    size: 10.sp,
                     color: AppColors.col7A7A7A,
-                    size: 14.sp,
+                  ).withPadding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w)),
+                  suffixIconConstraints:
+                      BoxConstraints(minHeight: 44.h, minWidth: 44.w),
+                  border: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: AppColors.colDDDDDD, width: 1.w),
+                    borderRadius: BorderRadius.circular(8.r),
                   ),
                 ),
-              ],
-            ),
-            10.h.ph,
-            TextField(
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
-                hintText: 'Search listing by name or location',
-                suffixIcon: ImageIcon(
-                  const AssetImage(AppImages.search),
-                  size: 10.sp,
-                  color: AppColors.col7A7A7A,
-                ).withPadding(padding: EdgeInsets.symmetric(horizontal: 10.w)),
-                suffixIconConstraints: BoxConstraints(minHeight: 44.h, minWidth: 44.w),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.colDDDDDD, width: 1.w),
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
               ),
-            ),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisExtent: 249.h,
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisExtent: 249.h,
+                  ),
+                  itemBuilder: (context, index) => ListingContainer(
+                    title: 'Experiences',
+                    description: 'Add or customize your experiences',
+                    image: AppImages.r333,
+                    verificationText: 'Verification Required',
+                    onTap: () => context.pushName(AppRoutes.addListingScreen),
+                  ),
                 ),
-                itemBuilder: (context, index) => ListingContainer(
-                  title: 'Experiences',
-                  description: 'Add or customize your experiences',
-                  image: AppImages.r333,
-                  verificationText: 'Verification Required',
-                  onTap: () => context.pushName(AppRoutes.addListingScreen),
-                ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -201,7 +210,8 @@ class ListingContainer extends StatelessWidget {
               color: AppColors.col222222,
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
-            ).withPadding(padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h)),
+            ).withPadding(
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h)),
             AppText(
               text: description,
               color: AppColors.col6A6A6A,

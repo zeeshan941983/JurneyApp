@@ -24,7 +24,7 @@ class AccountProvider extends BaseViewModel {
     AccountView(),
     PersonalInfoView(),
     SecurityView(),
-    ListingView(),
+    // ListingView(),
   ];
 
   int _selectedPage = 0;
