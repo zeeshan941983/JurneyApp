@@ -22,7 +22,12 @@ class _SplashScreenState extends State<SplashScreen> {
       await provider.getUserData();
       Future.delayed(
         const Duration(seconds: 2),
-        () => provider.token == null ? context.pushAndRemoveAll(AppRoutes.loginScreen) : context.pushAndRemoveAll(AppRoutes.homeScreen),
+        // ignore: use_build_context_synchronously
+        () => provider.token == null
+            // ignore: use_build_context_synchronously
+            ? context.pushAndRemoveAll(AppRoutes.loginScreen)
+            // ignore: use_build_context_synchronously
+            : context.pushAndRemoveAll(AppRoutes.homeScreen),
       );
     });
   }
@@ -36,7 +41,9 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             AnimatedAlign(
               duration: Durations.extralong4,
-              alignment: provider.isLoading ? Alignment.center : Alignment.bottomCenter,
+              alignment: provider.isLoading
+                  ? Alignment.center
+                  : Alignment.bottomCenter,
               child: AnimatedOpacity(
                 duration: Durations.extralong4,
                 opacity: provider.isLoading ? 1 : 0,

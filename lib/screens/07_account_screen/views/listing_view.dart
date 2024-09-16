@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
+import 'package:ibiza/core/models/most_popular_post.dart';
 import 'package:ibiza/core/routes/app_router.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
+import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
 import 'package:ibiza/screens/07_account_screen/provider/account_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +15,29 @@ class ListingView extends StatefulWidget {
 }
 
 class _ListingViewState extends State<ListingView> {
+  List<DocumentModel> filteredList = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    filteredList = context.read<HomeProvider>().popularServiceModel.documents;
+  }
+
+  void _filterSearch(String query) {
+    final value = context.read<HomeProvider>();
+    setState(() {
+      if (query.isEmpty) {
+        filteredList = value.popularServiceModel.documents;
+      } else {
+        filteredList = value.popularServiceModel.documents
+            .where(
+                (doc) => doc.title.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AccountProvider>(
@@ -75,6 +100,7 @@ class _ListingViewState extends State<ListingView> {
               ),
               10.h.ph,
               TextField(
+                onChanged: _filterSearch,
                 decoration: InputDecoration(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
@@ -96,14 +122,15 @@ class _ListingViewState extends State<ListingView> {
               ),
               Expanded(
                 child: GridView.builder(
+                  itemCount: filteredList.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     mainAxisExtent: 249.h,
                   ),
                   itemBuilder: (context, index) => ListingContainer(
-                    title: 'Experiences',
-                    description: 'Add or customize your experiences',
-                    image: AppImages.r333,
+                    title: filteredList[index].title,
+                    description: filteredList[index].price.toString(),
+                    image: filteredList[index].images.first,
                     verificationText: 'Verification Required',
                     onTap: () => context.pushName(AppRoutes.addListingScreen),
                   ),
@@ -163,7 +190,7 @@ class ListingContainer extends StatelessWidget {
                   topRight: Radius.circular(14.r),
                 ),
                 image: DecorationImage(
-                  image: AssetImage(image),
+                  image: NetworkImage(image),
                   fit: BoxFit.cover,
                 ),
               ),

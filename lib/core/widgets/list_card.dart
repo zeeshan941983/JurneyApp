@@ -23,7 +23,6 @@ class ListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(image);
     return SizedBox(
       width: 158.w,
       child: Column(

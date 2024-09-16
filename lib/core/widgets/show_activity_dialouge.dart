@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
 
@@ -186,17 +184,17 @@ class ActivityContainer extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                       fontFamily: outfit,
                     ),
-                    children: [
-                      // TextSpan(
-                      //   text: '${}',
-                      //   style: TextStyle(
-                      //     color: AppColors.colDB8332,
-                      //     fontSize: 10.sp,
-                      //     fontFamily: outfit,
-                      //     fontWeight: FontWeight.w400,
-                      //   ),
-                      // ),
-                    ],
+                    // children: [
+                    //   // TextSpan(
+                    //   //   text: '${}',
+                    //   //   style: TextStyle(
+                    //   //     color: AppColors.colDB8332,
+                    //   //     fontSize: 10.sp,
+                    //   //     fontFamily: outfit,
+                    //   //     fontWeight: FontWeight.w400,
+                    //   //   ),
+                    //   // ),
+                    // ],
                   ),
                 )
               ],

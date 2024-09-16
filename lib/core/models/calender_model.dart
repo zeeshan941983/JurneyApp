@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 class CalenderModel {
   final List<Week> weeks;
@@ -158,7 +159,7 @@ class Activity {
   });
 
   factory Activity.fromJson(Map<String, dynamic> json) {
-    print('Parsing Activity with json: $json');
+    log('Parsing Activity with json: $json');
 
     String? addressString = json['address'];
     Address? addressObj;
@@ -167,7 +168,7 @@ class Activity {
       try {
         addressObj = Address.fromJson(jsonDecode(addressString));
       } catch (e) {
-        print('Error parsing address: $e');
+        log('Error parsing address: $e');
         addressObj = null;
       }
     }

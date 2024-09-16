@@ -10,7 +10,7 @@ import 'package:ibiza/core/constants/storage_keys.dart';
 import 'package:ibiza/core/models/user_model.dart';
 import 'package:ibiza/core/view_model/base_view_model.dart';
 import 'package:ibiza/screens/07_account_screen/views/account_view.dart';
-import 'package:ibiza/screens/07_account_screen/views/listing_view.dart';
+
 import 'package:ibiza/screens/07_account_screen/views/personal_info_view.dart';
 import 'package:ibiza/screens/07_account_screen/views/security_view.dart';
 import 'package:image_picker/image_picker.dart';

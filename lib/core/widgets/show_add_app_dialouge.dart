@@ -160,7 +160,7 @@ void showAddAppointmentDialog(
                 String endTime = provider.setTimeForm(
                   selectedDate.add(provider.duration),
                 );
-                print("here is key ${provider.populardata!.id}");
+                // log("here is key ${provider.populardata!.id}");
 
                 if (formKey.currentState!.validate()) {
                   String? subject = provider.populardata?.title;
@@ -190,7 +190,7 @@ void showAddAppointmentDialog(
                     Provider.of<HomeProvider>(context, listen: false)
                         .setAppointment(newAppointment);
                     provider.getCalenders();
-                    print(week);
+
                     Navigator.of(context).pop();
                   }
                 }
