@@ -85,7 +85,9 @@ class _PersonalInfoViewState extends State<PersonalInfoView> {
                             await provider.pickImage();
                             provider.setState(ViewState.idle);
                           },
-                          style: ButtonStyle(backgroundColor: WidgetStateColor.resolveWith((states) => AppColors.colFFFFFF)),
+                          style: ButtonStyle(
+                              backgroundColor: WidgetStateColor.resolveWith(
+                                  (states) => AppColors.colFFFFFF)),
                           icon: ImageIcon(
                             const AssetImage(AppImages.edit),
                             size: 20.sp,

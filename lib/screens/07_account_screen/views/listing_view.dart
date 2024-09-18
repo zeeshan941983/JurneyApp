@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
-import 'package:ibiza/core/models/most_popular_post.dart';
+
 import 'package:ibiza/core/routes/app_router.dart';
 import 'package:ibiza/core/widgets/app_text.dart';
+import 'package:ibiza/screens/04_home_screen/models/user_services_model.dart';
 import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
-import 'package:ibiza/screens/07_account_screen/provider/account_provider.dart';
+
 import 'package:provider/provider.dart';
 
 class ListingView extends StatefulWidget {
@@ -15,24 +16,24 @@ class ListingView extends StatefulWidget {
 }
 
 class _ListingViewState extends State<ListingView> {
-  List<DocumentModel> filteredList = [];
+  List<UserDocumentModel> filteredList = [];
 
   @override
   void initState() {
     super.initState();
 
-    filteredList = context.read<HomeProvider>().popularServiceModel.documents;
+    filteredList = context.read<HomeProvider>().userServices;
   }
 
   void _filterSearch(String query) {
     final value = context.read<HomeProvider>();
     setState(() {
       if (query.isEmpty) {
-        filteredList = value.popularServiceModel.documents;
+        filteredList = value.userServices;
       } else {
-        filteredList = value.popularServiceModel.documents
+        filteredList = value.userServices
             .where(
-                (doc) => doc.title.toLowerCase().contains(query.toLowerCase()))
+                (doc) => doc.title!.toLowerCase().contains(query.toLowerCase()))
             .toList();
       }
     });
@@ -40,13 +41,14 @@ class _ListingViewState extends State<ListingView> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AccountProvider>(
+    return Consumer<HomeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: Padding(
           padding: EdgeInsets.all(10.0.dg),
           child: Column(
             children: [
               15.h.ph,
+
               // Row(
               //   mainAxisAlignment: MainAxisAlignment.start,
               //   children: [
@@ -128,9 +130,9 @@ class _ListingViewState extends State<ListingView> {
                     mainAxisExtent: 249.h,
                   ),
                   itemBuilder: (context, index) => ListingContainer(
-                    title: filteredList[index].title,
+                    title: filteredList[index].title!,
                     description: filteredList[index].price.toString(),
-                    image: filteredList[index].images.first,
+                    image: filteredList[index].image!,
                     verificationText: 'Verification Required',
                     onTap: () => context.pushName(AppRoutes.addListingScreen),
                   ),

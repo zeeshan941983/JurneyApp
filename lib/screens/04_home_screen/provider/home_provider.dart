@@ -14,9 +14,13 @@ import 'package:ibiza/core/models/add_activity_model.dart';
 import 'package:ibiza/core/models/calender_model.dart';
 import 'package:ibiza/core/models/most_popular_post.dart';
 import 'package:ibiza/core/view_model/base_view_model.dart';
+import 'package:ibiza/core/widgets/custom_loader.dart';
 import 'package:ibiza/core/widgets/show_add_app_dialouge.dart';
+import 'package:ibiza/main.dart';
+import 'package:ibiza/screens/02_login_screen/login_screen.dart';
 import 'package:ibiza/screens/04_home_screen/models/card_model.dart';
 import 'package:ibiza/screens/04_home_screen/models/sites_model.dart';
+import 'package:ibiza/screens/04_home_screen/models/user_services_model.dart';
 import 'package:intl/intl.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +32,7 @@ class HomeProvider extends BaseViewModel {
     getCategories();
     getCalenders();
     getPopularService();
+    getUserServices();
   }
   final TextEditingController searchController = TextEditingController();
   List<Categories> _categories = [];
@@ -410,30 +415,95 @@ class HomeProvider extends BaseViewModel {
   }
 
   ///LOGOUT the User
-  Future<bool> logoutUser() async {
+  Future<void> logoutUser(BuildContext context) async {
     try {
+      if (navigatorKey.currentState != null) {
+        navigatorKey.currentState!.pop();
+      }
+
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(
+            child: CustomLoader(),
+          );
+        },
+      );
+
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString(USER_TOKEN);
+
+      await Future.delayed(const Duration(seconds: 2));
+
       if (token != null && token.isNotEmpty) {
-        final data = await APIRequests.makeGetRequest(
-            Endpoints.logout, {'Authorization': token}, {});
-        log(data.toString());
-        if (data.error) {
-          // logoutUser();
-          return false;
+        // Uncomment and use your actual API request for logout
+        // final data = await APIRequests.makeGetRequest(
+        //     Endpoints.logout, {'Authorization': token}, {});
+        // log(data.toString());
+
+        // Assuming logout was successful, clear preferences
+        prefs.clear();
+
+        if (navigatorKey.currentState != null) {
+          navigatorKey.currentState!.pop();
         }
 
-        Fluttertoast.showToast(msg: data.body['message']);
-        prefs.clear();
-        return true;
+        navigatorKey.currentState!.pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+          (route) => false,
+        );
+      } else {
+        if (navigatorKey.currentState != null) {
+          navigatorKey.currentState!.pop();
+        }
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Failed to Logout user $e');
-      return false;
+      log('Exception occurred: $e');
+
+      if (navigatorKey.currentState != null) {
+        navigatorKey.currentState!.pop();
+      }
     }
-    return false;
   }
 
+/////////////==========Get USer Service============/////////
+  List<UserDocumentModel> _userServices = [];
+
+  List<UserDocumentModel> get userServices => _userServices;
+  Future<void> getUserServices() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(USER_TOKEN);
+    if (token != null) {
+      final response = await APIRequests.makeGetRequest(
+        Endpoints.userServices,
+        {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': 'Bearer $token',
+        },
+        {},
+      );
+      if (response.error) {
+        log('Error fetching user services: ${response.message}');
+        return;
+      }
+
+      // Access the 'data' field from the response
+      final data = response.body;
+      log('Data: $data');
+      if (data != null) {
+        final userservice = UserServiceModel.fromJson(data);
+
+        // Update your _userServices list with the documents
+        _userServices = userservice.documents ?? [];
+
+        // Notify listeners that the data has changed
+        notifyListeners();
+      }
+    }
+  }
+
+  ///
 ////==========genral providers==========///
   ///getDateTimeFromWeekDayTime
   String getStartOfWeek(DateTime date) {

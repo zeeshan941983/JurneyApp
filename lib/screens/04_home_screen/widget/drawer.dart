@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/routes/app_router.dart';
+import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
+import 'package:provider/provider.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -10,56 +12,72 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: const Color(0xFF1E99A1),
-      child: ListView(
-        children: [
-          draweheader(),
-          20.ph,
-          Container(
-            height: 480.h,
-            color: Colors.white,
-            child: Column(
-              children: [
-                listTileData(
-                  title: 'Trip',
-                  icon: CupertinoIcons.bag,
-                  onTap: () {},
-                ),
-                listTileData(
-                  title: 'WishList`s',
-                  icon: CupertinoIcons.star,
-                  onTap: () {},
-                ),
-                listTileData(
-                  title: 'Messages',
-                  icon: CupertinoIcons.bubble_left_bubble_right,
-                  onTap: () {},
-                ),
-                listTileData(
-                  title: 'Account',
-                  icon: CupertinoIcons.person,
-                  onTap: () =>
-                      Navigator.pushNamed(context, AppRoutes.accountScreen),
-                ),
-                listTileData(
-                  title: 'Manage Listing',
-                  icon: Icons.list,
-                  onTap: () =>
-                      Navigator.pushNamed(context, AppRoutes.listingView),
-                ),
-                listTileData(
-                  title: 'Help Center',
-                  icon: Icons.help,
-                  onTap: () {},
-                ),
-                listTileData(
-                  title: 'Logout',
-                  icon: Icons.logout_outlined,
-                  onTap: () {},
-                ),
-              ],
+      child: Consumer<HomeProvider>(
+        builder: (context, value, child) => ListView(
+          children: [
+            draweheader(),
+            20.ph,
+            Container(
+              height: 480.h,
+              color: Colors.white,
+              child: Column(
+                children: [
+                  listTileData(
+                    title: 'Trip',
+                    icon: CupertinoIcons.bag,
+                    onTap: () {},
+                  ),
+                  listTileData(
+                    title: 'WishList`s',
+                    icon: CupertinoIcons.star,
+                    onTap: () {},
+                  ),
+                  listTileData(
+                    title: 'Messages',
+                    icon: CupertinoIcons.bubble_left_bubble_right,
+                    onTap: () {},
+                  ),
+                  listTileData(
+                    title: 'Account',
+                    icon: CupertinoIcons.person,
+                    onTap: () =>
+                        Navigator.pushNamed(context, AppRoutes.accountScreen),
+                  ),
+                  listTileData(
+                    title: 'Manage Listing',
+                    icon: Icons.list,
+                    onTap: () =>
+                        Navigator.pushNamed(context, AppRoutes.listingView),
+                  ),
+                  listTileData(
+                    title: 'Help Center',
+                    icon: Icons.help,
+                    onTap: () {},
+                  ),
+                  listTileData(
+                    title: 'Register',
+                    icon: Icons.app_registration,
+                    onTap: () {},
+                  ),
+                  listTileData(
+                    title: 'Sign In',
+                    icon: Icons.login,
+                    onTap: () {
+                      value.logoutUser(context);
+                    },
+                  ),
+                  listTileData(
+                    title: 'Logout',
+                    icon: Icons.logout_outlined,
+                    onTap: () {
+                      value.logoutUser(context);
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

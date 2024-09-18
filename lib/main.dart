@@ -6,8 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:ibiza/core/api/endpoints.dart';
 import 'package:ibiza/core/api/requests.dart';
 import 'package:ibiza/core/constants/constants.dart';
+
 import 'package:ibiza/core/routes/app_router.dart';
 import 'package:ibiza/core/widgets/app_button.dart';
+import 'package:ibiza/core/widgets/custom_loader.dart';
 import 'package:ibiza/screens/01_splas_screen/provider/slash_provider.dart';
 import 'package:ibiza/screens/02_login_screen/provider/login_provider.dart';
 import 'package:ibiza/screens/04_home_screen/provider/home_provider.dart';
@@ -74,13 +76,15 @@ class _CheckdataState extends State<Checkdata> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: Consumer<ServiceProvider>(
+          child: Consumer<HomeProvider>(
         builder: (context, value, child) => Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.network(value.serviceOffers[0].iconURL),
-            for (var element in value.serviceOffers[0].priceModel)
-              Text(element.name),
+            ElevatedButton(
+                onPressed: () async {
+                  value.logoutUser(context);
+                },
+                child: Text("data"))
           ],
         ),
       )),

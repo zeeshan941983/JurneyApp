@@ -16,6 +16,7 @@ class Endpoints {
   static const String changeUser = "$user/change-username";
   static const String changeAddress = "$user/change-address";
   static const String services = "$url/services";
+  static const String userServices = "$url/user/services";
 
   static const String getCalender = "$url/calender";
   static const String getserviceConditions = "$url/conditions";
