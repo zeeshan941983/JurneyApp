@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
 import 'package:ibiza/core/constants/constants.dart';
 import 'package:ibiza/core/models/add_activity_model.dart';
@@ -161,7 +162,7 @@ void showAddAppointmentDialog(
                   selectedDate.add(provider.duration),
                 );
                 // log("here is key ${provider.populardata!.id}");
-
+                dev.log(week + selecteddate + weekofday + starttime + endTime);
                 if (formKey.currentState!.validate()) {
                   String? subject = provider.populardata?.title;
                   if (subject != "") {
@@ -189,7 +190,7 @@ void showAddAppointmentDialog(
                     provider.getActivityToCalendar(weekActivity);
                     Provider.of<HomeProvider>(context, listen: false)
                         .setAppointment(newAppointment);
-                    provider.getCalenders();
+                    // provider.guest();
 
                     Navigator.of(context).pop();
                   }

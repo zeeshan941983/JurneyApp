@@ -17,9 +17,9 @@ dependencies:
   modal_progress_hud_nsn: ^0.5.1
   flutter_screenutil: ^5.9.1
   lottie: ^3.1.2
-  syncfusion_flutter_calendar: ^25.2.5
+  syncfusion_flutter_calendar: ^27.1.48
   intl: ^0.19.0
-  syncfusion_localizations: ^25.2.5
+  syncfusion_localizations: ^27.1.48
   flutter_localizations:
     sdk: flutter
   duration_picker: ^1.2.0
@@ -30,22 +30,24 @@ dependencies:
   fluttertoast: ^8.2.6
   shared_preferences: ^2.2.3
   cached_network_image: ^3.3.1
-  fl_chart: ^0.68.0
+  fl_chart: ^0.69.0
   image_picker: ^1.1.2
-  geolocator: ^11.1.0
+  geolocator: ^13.0.1
   flutter_custom_clippers: ^2.1.0
   flutter_svg: ^2.0.10+1
   table_calendar:
   permission_handler:
   google_maps_flutter: ^2.9.0
   geocoding: ^3.0.0
+
+  
   
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
 
 flutter:
 

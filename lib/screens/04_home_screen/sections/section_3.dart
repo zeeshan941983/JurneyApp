@@ -67,6 +67,7 @@ class Section3 extends StatelessWidget {
               homeProvider: homeProvider,
             ),
           ),
+          ElevatedButton(onPressed: () {}, child: Text("data")),
           20.ph,
           Align(
             alignment: Alignment.topLeft,

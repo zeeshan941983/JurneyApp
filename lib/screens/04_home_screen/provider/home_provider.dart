@@ -30,9 +30,10 @@ class HomeProvider extends BaseViewModel {
   ///------------Section 1 Provider----------------
   HomeProvider() {
     getCategories();
-    getCalenders();
+    guest();
     getPopularService();
     getUserServices();
+    getCalenders();
   }
   final TextEditingController searchController = TextEditingController();
   List<Categories> _categories = [];
@@ -107,6 +108,7 @@ class HomeProvider extends BaseViewModel {
 
   DataSource events = DataSource([]);
   List<Appointment> _listOfUserAppointments = [];
+  List<Appointment> get listOfUserAppointments => _listOfUserAppointments;
   void onCalendarTapped(CalendarTapDetails details, BuildContext context) {
     if (details.targetElement == CalendarElement.calendarCell) {
       showAddAppointmentDialog(details.date!, context);
@@ -115,34 +117,34 @@ class HomeProvider extends BaseViewModel {
 
   DateTime date = DateTime.now();
 
-  // Future<void> getCalenders() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final cookie = prefs.getString('GUEST_COOKIE');
-  //   ResponseModel response = ResponseModel.empty();
-  //   if (cookie != null) {
-  //     response = await APIRequests.makeGetRequest(Endpoints.getCalender, {
-  //       'Cookie': cookie,
-  //     }, {});
-  //   } else {
-  //     response =
-  //         await APIRequests.makeGetRequest(Endpoints.getCalender, {}, {});
-  //     prefs.setString(
-  //         'GUEST_COOKIE', response.header['set-cookie']?.split(';').first);
-  //     getCalenders();
-  //   }
-  //   if (response.error) {
-  //     Fluttertoast.showToast(msg: response.message.toString());
-  //     return;
-  //   }
-  //   final data = response.body['data'];
-  //   if (data != null) {
-  //     final calenders = CalenderModel.fromJson(convertStringToJson(data));
-  //     _listOfUserAppointments = getAppointments(calenders);
-  //     log(_listOfUserAppointments.length.toString());
-  //     setUserAppointments();
-  //     notifyListeners();
-  //   }
-  // }
+  Future<void> guest() async {
+    final prefs = await SharedPreferences.getInstance();
+    final cookie = prefs.getString('GUEST_COOKIE');
+    ResponseModel response = ResponseModel.empty();
+    if (cookie != null) {
+      response = await APIRequests.makeGetRequest(Endpoints.getCalender, {
+        'Cookie': cookie,
+      }, {});
+    } else {
+      response =
+          await APIRequests.makeGetRequest(Endpoints.getCalender, {}, {});
+      prefs.setString(
+          'GUEST_COOKIE', response.header['set-cookie']?.split(';').first);
+      guest();
+    }
+    if (response.error) {
+      Fluttertoast.showToast(msg: response.message.toString());
+      return;
+    }
+    final data = response.body['data'];
+    if (data != null) {
+      final calenders = CalenderModel.fromJson(convertStringToJson(data));
+      _listOfUserAppointments = getAppointments(calenders);
+      log(_listOfUserAppointments.length.toString());
+      setUserAppointments();
+      notifyListeners();
+    }
+  }
 
   getCalenders() async {
     final prefs = await SharedPreferences.getInstance();
@@ -170,6 +172,7 @@ class HomeProvider extends BaseViewModel {
       final calenders = CalenderModel.fromJson(convertStringToJson(data));
       _listOfUserAppointments = getAppointments(calenders);
       log(_listOfUserAppointments.length.toString());
+      events = DataSource(_listOfUserAppointments);
       setUserAppointments();
       notifyListeners();
     }
@@ -278,7 +281,7 @@ class HomeProvider extends BaseViewModel {
       );
 
       if (!response.error) {
-        print('Success: ${response.body}');
+        print(' Success: ${response.body}');
       } else {
         print('Error: ${response.message}');
       }
